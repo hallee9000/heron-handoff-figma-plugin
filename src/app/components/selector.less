@@ -1,0 +1,88 @@
+.selector{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  &-header{
+    display: flex;
+    padding: 0 12px;
+    .header-action{
+      line-height: 30px;
+      margin-right: 12px;
+      padding-left: 1px;
+      cursor: pointer;
+      &-arrow{
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01LjI5Mjg5IDguMjkyODlDNS42ODM0MiA3LjkwMjM3IDYuMzE2NTggNy45MDIzNyA2LjcwNzExIDguMjkyODlMMTIgMTMuNTg1OEwxNy4yOTI5IDguMjkyODlDMTcuNjgzNCA3LjkwMjM3IDE4LjMxNjYgNy45MDIzNyAxOC43MDcxIDguMjkyODlDMTkuMDk3NiA4LjY4MzQyIDE5LjA5NzYgOS4zMTY1OCAxOC43MDcxIDkuNzA3MTFMMTIuNzA3MSAxNS43MDcxQzEyLjMxNjYgMTYuMDk3NiAxMS42ODM0IDE2LjA5NzYgMTEuMjkyOSAxNS43MDcxTDUuMjkyODkgOS43MDcxMUM0LjkwMjM3IDkuMzE2NTggNC45MDIzNyA4LjY4MzQyIDUuMjkyODkgOC4yOTI4OVoiIGZpbGw9ImJsYWNrIi8+Cjwvc3ZnPgo=');
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      &.header-collapse{
+        .header-action-arrow{
+          transform: rotate(180deg);
+        }
+      }
+      &-disabled{
+        opacity: 0.65;
+      }
+    }
+  }
+  &-tree{
+    flex: 1;
+    overflow: auto;
+    border-top: 1px solid #F3F3F3;
+  }
+  &-actions{
+    position: relative;
+    padding: 8px 12px;
+    border-top: 1px solid #F3F3F3;
+    .actions-error{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      color: #FFF;
+      background-color: #f24822;
+      z-index: 1;
+    }
+    >button{
+      position: relative;
+      width: 100%;
+      &:disabled {
+        background-color: rgba(#18a0fb, 0.9);
+      }
+      div{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: #0c82d2;
+        border-radius: 5px;
+        z-index: 0;
+      }
+      span{
+        position: relative;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        z-index: 1;
+      }
+    }
+    .actions-extra{
+      margin-top: 12px;
+      text-align: right;
+      cursor: pointer;
+      a,span{
+        padding: 4px;
+        color: #333;
+        &:hover{
+          color: #18a0fb;
+        }
+      }
+    }
+  }
+}

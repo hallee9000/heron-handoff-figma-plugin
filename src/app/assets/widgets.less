@@ -1,0 +1,241 @@
+@treePrefixCls: ~'rc-tree';
+@treeNodePrefixCls: ~'@{treePrefixCls}-treenode';
+
+.@{treePrefixCls} {
+  margin: 0;
+  border: 1px solid transparent;
+  
+  &-focused:not(&-active-focused) {
+    border-color: cyan;
+  }
+
+  // padding: 5px;
+  .@{treeNodePrefixCls} {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 4px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+    list-style: none;
+    outline: 0;
+    transition: background-color 0.2s;
+    &:hover{
+      background-color: #F3F3F3;
+    }
+    .draggable {
+      color: #333;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+      /* Required to make elements draggable in old WebKit */
+      -khtml-user-drag: element;
+      -webkit-user-drag: element;
+    }
+    &.drag-over {
+      > .draggable {
+        color: white;
+        background-color: #316ac5;
+        border: 1px #316ac5 solid;
+        opacity: 0.8;
+      }
+    }
+    &.drag-over-gap-top {
+      > .draggable {
+        border-top: 2px blue solid;
+      }
+    }
+    &.drag-over-gap-bottom {
+      > .draggable {
+        border-bottom: 2px blue solid;
+      }
+    }
+    &.filter-node {
+      > .@{treePrefixCls}-node-content-wrapper {
+        color: #a60000 !important;
+        font-weight: bold !important;
+      }
+    }
+    ul {
+      margin: 0;
+      padding: 0 0 0 18px;
+    }
+    .@{treePrefixCls}-node-content-wrapper {
+      flex: 1;
+      line-height: 16px;
+      margin: 0;
+      padding: 1px 3px 0 0;
+      text-decoration: none;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    span {
+      &.@{treePrefixCls}-switcher,
+      &.@{treePrefixCls}-iconEle,
+      &.@{treePrefixCls}-checkbox{
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        line-height: 16px;
+        background-color: transparent;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: none;
+        transition: background-color 0.2s, border-color 0.2s;
+        outline: none;
+        cursor: pointer;
+        &:hover{
+          border-color: #18a0fb;
+        }
+        &.@{treePrefixCls}-icon__customize {
+          background-image: none;
+        }
+      }
+      &.@{treePrefixCls}-icon_loading {
+        margin-right: 2px;
+        vertical-align: top;
+        background: url('data:image/gif;base64,R0lGODlhEAAQAKIGAMLY8YSx5HOm4Mjc88/g9Ofw+v///wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFCgAGACwAAAAAEAAQAAADMGi6RbUwGjKIXCAA016PgRBElAVlG/RdLOO0X9nK61W39qvqiwz5Ls/rRqrggsdkAgAh+QQFCgAGACwCAAAABwAFAAADD2hqELAmiFBIYY4MAutdCQAh+QQFCgAGACwGAAAABwAFAAADD1hU1kaDOKMYCGAGEeYFCQAh+QQFCgAGACwKAAIABQAHAAADEFhUZjSkKdZqBQG0IELDQAIAIfkEBQoABgAsCgAGAAUABwAAAxBoVlRKgyjmlAIBqCDCzUoCACH5BAUKAAYALAYACgAHAAUAAAMPaGpFtYYMAgJgLogA610JACH5BAUKAAYALAIACgAHAAUAAAMPCAHWFiI4o1ghZZJB5i0JACH5BAUKAAYALAAABgAFAAcAAAMQCAFmIaEp1motpDQySMNFAgA7')
+          no-repeat scroll 0 0 transparent;
+      }
+      &.@{treePrefixCls}-switcher {
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01LjI5Mjg5IDguMjkyODlDNS42ODM0MiA3LjkwMjM3IDYuMzE2NTggNy45MDIzNyA2LjcwNzExIDguMjkyODlMMTIgMTMuNTg1OEwxNy4yOTI5IDguMjkyODlDMTcuNjgzNCA3LjkwMjM3IDE4LjMxNjYgNy45MDIzNyAxOC43MDcxIDguMjkyODlDMTkuMDk3NiA4LjY4MzQyIDE5LjA5NzYgOS4zMTY1OCAxOC43MDcxIDkuNzA3MTFMMTIuNzA3MSAxNS43MDcxQzEyLjMxNjYgMTYuMDk3NiAxMS42ODM0IDE2LjA5NzYgMTEuMjkyOSAxNS43MDcxTDUuMjkyODkgOS43MDcxMUM0LjkwMjM3IDkuMzE2NTggNC45MDIzNyA4LjY4MzQyIDUuMjkyODkgOC4yOTI4OVoiIGZpbGw9ImJsYWNrIi8+Cjwvc3ZnPgo=');
+        transition: transform 0.2s;
+        &.@{treePrefixCls}-switcher-noop {
+          cursor: auto;
+        }
+        &.@{treePrefixCls}-switcher_close {
+          transform: rotate(-90deg);
+        }
+        &.@{treePrefixCls}-switcher_open {
+          transform: rotate(0deg);
+        }
+      }
+      &.@{treePrefixCls}-checkbox {
+        width: 13px;
+        height: 13px;
+        margin-right: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        border-radius: 2px;
+        &-checked {
+          background-color: #18a0fb;
+          border-color: #18a0fb;
+          background-image: url("data:image/svg+xml;utf8,%3Csvg%20fill%3D%22none%22%20height%3D%227%22%20viewBox%3D%220%200%208%207%22%20width%3D%228%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20clip-rule%3D%22evenodd%22%20d%3D%22m1.17647%201.88236%201.88235%201.88236%203.76471-3.76472%201.17647%201.17648-4.94118%204.9412-3.05882-3.05884z%22%20fill%3D%22%23fff%22%20fill-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E");
+          background-size: 83%;
+        }
+        &-indeterminate {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #18a0fb;
+          border-color: #18a0fb;
+          &::before{
+            content: '';
+            display: block;
+            width: 9px;
+            height: 2px;
+            background-color: #FFF;
+          }
+        }
+        &-disabled {
+          background-position: 0 -56px;
+        }
+        &.@{treePrefixCls}-checkbox-checked.@{treePrefixCls}-checkbox-disabled {
+          background-position: -14px -56px;
+        }
+        &.@{treePrefixCls}-checkbox-indeterminate.@{treePrefixCls}-checkbox-disabled {
+          position: relative;
+          background: #ccc;
+          border-radius: 3px;
+          &::after {
+            position: absolute;
+            top: 5px;
+            left: 3px;
+            width: 5px;
+            height: 0;
+            border: 2px solid #fff;
+            border-top: 0;
+            border-left: 0;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            content: ' ';
+          }
+        }
+      }
+    }
+  }
+  &:not(.@{treePrefixCls}-show-line) {
+    .@{treeNodePrefixCls} {
+      .@{treePrefixCls}-switcher-noop {
+        background: none;
+      }
+    }
+  }
+  &.@{treePrefixCls}-show-line {
+    .@{treeNodePrefixCls}:not(:last-child) {
+      > ul {
+        background: url('data:image/gif;base64,R0lGODlhCQACAIAAAMzMzP///yH5BAEAAAEALAAAAAAJAAIAAAIEjI9pUAA7')
+          0 0 repeat-y;
+      }
+      > .@{treePrefixCls}-switcher-noop {
+        background-position: -56px -18px;
+      }
+    }
+    .@{treeNodePrefixCls}:last-child {
+      > .@{treePrefixCls}-switcher-noop {
+        background-position: -56px -36px;
+      }
+    }
+  }
+  &-child-tree {
+    display: none;
+    &-open {
+      display: block;
+    }
+  }
+  &-treenode-disabled {
+    > span:not(.@{treePrefixCls}-switcher),
+    > a,
+    > a span {
+      color: #767676;
+      cursor: not-allowed;
+    }
+  }
+  &-treenode-active {
+    background: rgba(0, 0, 0, 0.1);
+
+    // .@{treePrefixCls}-node-content-wrapper {
+    //   background: rgba(0, 0, 0, 0.1);
+    // }
+  }
+  &-node-selected {
+    background-color: #ffe6b0;
+    border: 1px #ffb951 solid;
+    opacity: 0.8;
+  }
+  &-icon__open {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -110px -16px;
+  }
+  &-icon__close {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -110px 0;
+  }
+  &-icon__docu {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -110px -32px;
+  }
+  &-icon__customize {
+    margin-right: 2px;
+    vertical-align: top;
+  }
+  &-indent-unit {
+    display: inline-block;
+    padding-left: 18px;
+  }
+}
