@@ -1,5 +1,5 @@
 {
-  "name": "Figma Juuust Handoff Plugin",
+  "name": "Juuust Handoff",
   "id": "830051293378016221",
   "api": "1.0.0",
   "main": "dist/code.js",
