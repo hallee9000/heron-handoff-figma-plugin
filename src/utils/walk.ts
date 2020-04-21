@@ -173,7 +173,7 @@ export const walkDocument = (document, selectedFrameKeys, includeComponents) => 
     handleCornerRadius(treeNode, node);
     handleBoundingBox(treeNode, node, type);
     handleExportSettings(treeNode, node, imageExportSettings => {
-      if (!isSteppingComponent && node.visible) {
+      if (!isSteppingComponent && node.visible && !node.isMask) {
         imageExportSettings.map(imageExportSetting => {
           exportSettingNodes.push({exportType: 'exportSetting', node});
           exportSettings.push({...imageExportSetting, id: node.id, name: node.name});
