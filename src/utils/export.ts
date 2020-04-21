@@ -23,6 +23,7 @@ export const exportFrame = async (frameNode, useHDImages) => {
     });
   } catch (err) {
     console.log(err);
+    figma.notify(`Error occurs when exporting ${frameNode.name}, please check it.`);
   }
 };
 
@@ -45,6 +46,7 @@ export const exportExportSetting = async (exportNode, exportSettings, index) => 
     });
   } catch (err) {
     console.log(err);
+    figma.notify(`Error occurs when exporting ${exportNode.name}, please check it.`);
   }
 };
 
@@ -71,5 +73,6 @@ export const exportComponent = async (componentNode, useHDImages) => {
     });
   } catch (err) {
     console.log(err);
+    figma.notify(`Error occurs when exporting ${componentNode.name}, please check it.`);
   }
 };
