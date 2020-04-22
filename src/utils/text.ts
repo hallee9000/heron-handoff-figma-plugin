@@ -80,9 +80,16 @@ export const hasEqualProperties = (style, anotherStyle) => {
   }
 };
 
+export const getTrimedStyleId = styleId => {
+  const isSymbol = typeof styleId === 'symbol';
+  return isSymbol ? '' : styleId;
+};
+
 export const getSingleTextStyle = (textNode, index?) => {
-  const fillStyleId = index === undefined ? textNode.fillStyleId : textNode.getRangeFillStyleId(index, index + 1);
-  const textStyleId = index === undefined ? textNode.textStyleId : textNode.getRangeTextStyleId(index, index + 1);
+  const fillStyleId =
+    index === undefined ? getTrimedStyleId(textNode.fillStyleId) : textNode.getRangeFillStyleId(index, index + 1);
+  const textStyleId =
+    index === undefined ? getTrimedStyleId(textNode.textStyleId) : textNode.getRangeTextStyleId(index, index + 1);
   const fontSize = index === undefined ? textNode.fontSize : textNode.getRangeFontSize(index, index + 1);
   const fontName = index === undefined ? textNode.fontName : textNode.getRangeFontName(index, index + 1);
   const textDecoration =

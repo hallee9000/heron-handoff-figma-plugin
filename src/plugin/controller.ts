@@ -39,6 +39,7 @@ figma.ui.onmessage = async msg => {
     exportSettingNodes = data.exportSettingNodes;
     componentNodes = data.componentNodes;
     exportNodes = frameNodes.concat(exportSettingNodes, includeComponents ? componentNodes : []);
+
     sendMessage({
       type: 'bg:document-got',
       message: {fileData, pagedFrames, selectedFrameKeys, includeComponents, useHDImages}
