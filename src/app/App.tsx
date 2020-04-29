@@ -5,6 +5,7 @@ import Welcome from './components/Welcome';
 import Selector from './components/Selector';
 import {trimFilePath} from '../utils/helper';
 import {downloadHTMLAndAssets} from '../utils/download';
+import mixpanel from '../utils/mixpanel';
 
 import './assets/ds.css';
 import './assets/base.less';
@@ -124,6 +125,10 @@ export default class App extends React.Component {
         case 'bg:error':
           const {errorMessage} = message;
           this.setState({errorMessage});
+          break;
+        case 'bg:mixpanel-user':
+          const {userId} = message;
+          mixpanel.identify(userId);
           break;
       }
     };

@@ -2,6 +2,7 @@ import {getAllPagedFrames, getCurrentPageFrameKeys} from '../utils/frames';
 import {sendMessage} from '../utils/helper';
 import {exportFrame, exportComponent, exportExportSetting} from '../utils/export';
 import {walkDocument} from '../utils/walk';
+import {getUserId} from '../utils/identifyUser';
 
 let fileData, useHDImages, includeComponents;
 let frameNodes = [],
@@ -10,6 +11,9 @@ let frameNodes = [],
   exportNodes = [];
 
 figma.showUI(__html__, {width: 320, height: 480});
+
+// send mixpanel user id
+getUserId();
 
 figma.ui.onmessage = async msg => {
   if (msg.type === 'ui:set-welcomed') {
