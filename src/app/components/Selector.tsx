@@ -14,7 +14,9 @@ export interface Props {
   visible: boolean;
   percentage: number;
   buttonText: string;
+  errorMessage: string;
   onStart: (data) => void;
+  onClose: () => void;
 }
 
 export default class Selector extends React.Component<Props> {
@@ -66,7 +68,7 @@ export default class Selector extends React.Component<Props> {
     this.setState({supportVisible: !supportVisible});
   };
   render() {
-    const {visible, allFrames, percentage, buttonText} = this.props;
+    const {visible, allFrames, percentage, buttonText, errorMessage, onClose} = this.props;
     const {
       checkedKeys,
       expandedKeys,
@@ -124,9 +126,6 @@ export default class Selector extends React.Component<Props> {
           />
         </div>
         <div className="selector-actions">
-          {!checkedKeys.length && (
-            <div className="actions-error type type--pos-small-bold">Please select at least one Frame.</div>
-          )}
           <div className="checkbox">
             <input
               type="checkbox"
@@ -136,7 +135,7 @@ export default class Selector extends React.Component<Props> {
               onChange={this.handleCheckboxChange}
             />
             <label className="checkbox__label" htmlFor="includeComponents">
-              Export components separately
+              Export components list
             </label>
           </div>
           <div className="checkbox">
@@ -151,14 +150,24 @@ export default class Selector extends React.Component<Props> {
               Use high-quality images
             </label>
           </div>
-          <button
-            className="button button--primary"
-            disabled={(percentage > 0 && percentage < 100) || !checkedKeys.length}
-            onClick={this.handleStart}
-          >
-            <div style={{width: `${percentage}%`}} />
-            <span>{buttonText}</span>
-          </button>
+          {!checkedKeys.length && (
+            <div className="actions-error type type--pos-small-bold">Please select at least one Frame.</div>
+          )}
+          {errorMessage && <div className="actions-error type type--pos-small-bold">{errorMessage}</div>}
+          {errorMessage ? (
+            <button className="button button--secondary" onClick={onClose}>
+              Close and check
+            </button>
+          ) : (
+            <button
+              className="button button--primary"
+              disabled={(percentage > 0 && percentage < 100) || !checkedKeys.length}
+              onClick={this.handleStart}
+            >
+              <div style={{width: `${percentage}%`}} />
+              <span>{buttonText}</span>
+            </button>
+          )}
           <div className="actions-extra">
             <a href="https://github.com/leadream/figma-handoff#plugin" target="_blank" title="Docs">
               <Docs />

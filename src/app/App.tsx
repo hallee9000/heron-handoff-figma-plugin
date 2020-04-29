@@ -30,7 +30,8 @@ export default class App extends React.Component {
     data: defaultData,
     isWaiting: true,
     percentage: 0,
-    buttonText: 'Start exporting'
+    buttonText: 'Start exporting',
+    errorMessage: ''
   };
   sendMessage = message => {
     // console.log(message.type);
@@ -120,11 +121,15 @@ export default class App extends React.Component {
         case 'bg:image-exported':
           this.zipImageExport(zip, message);
           break;
+        case 'bg:error':
+          const {errorMessage} = message;
+          this.setState({errorMessage});
+          break;
       }
     };
   }
   render() {
-    const {data, isWaiting, percentage, buttonText} = this.state;
+    const {data, isWaiting, percentage, buttonText, errorMessage} = this.state;
     const {allFrames, currentFrames, currentPageKey} = data;
     const hasValue = !!(allFrames && currentFrames);
     return (
@@ -140,7 +145,9 @@ export default class App extends React.Component {
                 currentPageKey={currentPageKey}
                 percentage={percentage}
                 buttonText={buttonText}
+                errorMessage={errorMessage}
                 onStart={this.handleStartExport}
+                onClose={() => this.sendMessage({type: 'ui:close-plugin'})}
               />
             )}
           </React.Fragment>

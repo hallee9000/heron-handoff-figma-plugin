@@ -1,5 +1,17 @@
 import {sendMessage, trimFilePath, getFileName} from '../utils/helper';
 
+const handleError = node => {
+  const errorMessage = `Error occurs when exporting ${node.name}, please check it.`;
+  sendMessage({
+    type: 'bg:error',
+    message: {
+      errorMessage
+    }
+  });
+  figma.currentPage.selection = [node];
+  figma.viewport.scrollAndZoomIntoView([node]);
+};
+
 // start export frames's image
 export const exportFrame = async (frameNode, useHDImages) => {
   try {
@@ -22,8 +34,8 @@ export const exportFrame = async (frameNode, useHDImages) => {
       }
     });
   } catch (err) {
-    console.log(err);
-    figma.notify(`Error occurs when exporting ${frameNode.name}, please check it.`);
+    // console.log(err)
+    handleError(frameNode);
   }
 };
 
@@ -45,8 +57,8 @@ export const exportExportSetting = async (exportNode, exportSettings, index) => 
       }
     });
   } catch (err) {
-    console.log(err);
-    figma.notify(`Error occurs when exporting ${exportNode.name}, please check it.`);
+    // console.log(err)
+    handleError(exportNode);
   }
 };
 
@@ -72,7 +84,7 @@ export const exportComponent = async (componentNode, useHDImages) => {
       }
     });
   } catch (err) {
-    console.log(err);
-    figma.notify(`Error occurs when exporting ${componentNode.name}, please check it.`);
+    // console.log(err)
+    handleError(componentNode);
   }
 };

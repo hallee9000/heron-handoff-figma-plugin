@@ -9,7 +9,7 @@ let frameNodes = [],
   componentNodes = [],
   exportNodes = [];
 
-figma.showUI(__html__, {width: 300, height: 480});
+figma.showUI(__html__, {width: 320, height: 480});
 
 figma.ui.onmessage = async msg => {
   if (msg.type === 'ui:set-welcomed') {
@@ -59,6 +59,7 @@ figma.ui.onmessage = async msg => {
         await exportComponent(node, useHDImages);
         break;
     }
+  } else if (msg.type === 'ui:close-plugin') {
+    figma.closePlugin();
   }
-  // figma.closePlugin();
 };
