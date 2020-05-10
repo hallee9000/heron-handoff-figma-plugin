@@ -11,23 +11,15 @@ export interface Props {
 export default ({visible, onStart}) => (
   <div className={cn('welcome', {hide: !visible})}>
     <img src="https://figmacn.com/handoff/welcome.png" />
-    <h2 className="type type--pos-xlarge-bold">Figma Handoff</h2>
+    <h2 className="type type--pos-xlarge-bold">Juuust Handoff</h2>
     <div className="welcome-introduction type type--pos-small-normal">
-      This is a plugin for{' '}
-      <a href="https://figmacn.com/handoff/" target="_blank">
-        Juuust Handoff
-      </a>
-      , which can help you export handoff files with specs.{' '}
+      This plugin can help you export developer handoff files with design specs.{' '}
       <a href="https://figmacn.com/handoff-landing" target="_blank">
         Learn more
       </a>
     </div>
     <div className="welcome-introduction type type--pos-small-normal">
-      这是一个可以帮助你生成设计标注文件的插件，方便你交付给开发，需配合{' '}
-      <a href="https://figmacn.com/handoff/" target="_blank">
-        Juuust Handoff
-      </a>{' '}
-      使用。
+      这是一个可以帮助你生成设计标注文件的插件，方便交付给开发。{' '}
       <a href="https://figmacn.com/handoff-landing" target="_blank">
         了解更多
       </a>

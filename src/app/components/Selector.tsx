@@ -3,6 +3,7 @@ import Tree from 'rc-tree';
 import cn from 'classnames';
 import Support from './Support';
 import {Docs, Coffee} from './icons';
+import mixpanel from '../../utils/mixpanel';
 import {getFlattenedFrameKeys, getSelectedPagedFrames, getPageKeys} from '../../utils/frames';
 
 import './selector.less';
@@ -57,6 +58,7 @@ export default class Selector extends React.Component<Props> {
     });
   };
   handleStart = () => {
+    mixpanel.track('Juuust Handoff', {Action: 'Start exporting'});
     const {allFrames} = this.props;
     const {checkedKeys, includeComponents, useHDImages} = this.state;
     const pagedFrames = getSelectedPagedFrames(allFrames, checkedKeys);

@@ -88,6 +88,7 @@ export default class App extends React.Component {
       zip.generateAsync({type: 'blob'}).then(content => {
         this.setPercentage(0, 'Export again');
         saveAs(content, `${trimFilePath(this.documentName)}.zip`);
+        mixpanel.track('Juuust Handoff', {Action: 'Exporting completed'});
       });
     }
   };
