@@ -1,5 +1,5 @@
 import {asyncForEach, getSourceCode, getBufferData} from './helper';
-const baseUrl = 'https://figmacn.com/handoff/';
+const baseUrl = 'https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com/';
 
 export const getScriptSrcs = indexSourceCode => {
   const scripts = indexSourceCode.match(/<script src=".\/static(?:.*?)<\/script>/g);
@@ -30,7 +30,7 @@ export const downloadHTMLAndAssets = async (zip, data, onPhase) => {
 // generate index.html
 export const handleIndexHTML = async (zip, data) => {
   const {fileData, pagedFrames, includeComponents} = data;
-  const indexSourceCode = await getSourceCode(baseUrl);
+  const indexSourceCode = await getSourceCode(`${baseUrl}index.html`);
   const indexSourceCodeWithData = (indexSourceCode as string)
     .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`)
     .replace('FILE_DATA=""', `FILE_DATA = ${JSON.stringify(fileData)}`)
