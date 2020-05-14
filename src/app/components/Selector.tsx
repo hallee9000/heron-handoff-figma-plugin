@@ -171,7 +171,7 @@ export default class Selector extends React.Component<Props> {
             </button>
           )}
           <div className="actions-extra">
-            <a href="https://github.com/leadream/figma-handoff#plugin" target="_blank" title="Docs">
+            <a href="https://figmacn.com/handoff-landing" target="_blank" title="Docs">
               <Docs />
             </a>
             <span onClick={this.toggleSupport} title="Buy me a coffee">

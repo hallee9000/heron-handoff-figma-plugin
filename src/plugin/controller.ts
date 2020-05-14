@@ -1,4 +1,4 @@
-import {getAllPagedFrames, getCurrentPageFrameKeys} from '../utils/frames';
+import {getAllPagedFrames, getSelectedFrameKeys} from '../utils/frames';
 import {sendMessage} from '../utils/helper';
 import {exportFrame, exportComponent, exportExportSetting} from '../utils/export';
 import {walkDocument} from '../utils/walk';
@@ -15,6 +15,16 @@ figma.showUI(__html__, {width: 320, height: 480});
 // send mixpanel user id
 getUserId();
 
+// figma.on('currentpagechange', () => {
+//   // change page
+//   console.log(figma.currentPage.selection)
+// })
+
+// figma.on('selectionchange', () => {
+//   // change selection
+//   console.log(figma.currentPage.selection)
+// })
+
 figma.ui.onmessage = async msg => {
   if (msg.type === 'ui:set-welcomed') {
     await figma.clientStorage.setAsync('welcomed', true);
@@ -29,7 +39,7 @@ figma.ui.onmessage = async msg => {
       type: 'bg:frames-got',
       message: {
         allFrames: getAllPagedFrames(figma.root),
-        currentFrames: getCurrentPageFrameKeys(figma.currentPage),
+        currentFrames: getSelectedFrameKeys(figma.currentPage),
         currentPageKey: figma.currentPage.id
       }
     });
