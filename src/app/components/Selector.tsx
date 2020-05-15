@@ -69,6 +69,11 @@ export default class Selector extends React.Component<Props> {
     const {supportVisible} = this.state;
     this.setState({supportVisible: !supportVisible});
   };
+  componentDidUpdate(prevProps) {
+    if (prevProps.buttonText !== this.props.buttonText && this.props.buttonText === 'Export again') {
+      this.toggleSupport();
+    }
+  }
   render() {
     const {visible, allFrames, percentage, buttonText, errorMessage, onClose} = this.props;
     const {
@@ -179,7 +184,7 @@ export default class Selector extends React.Component<Props> {
             </span>
           </div>
         </div>
-        <Support visible={supportVisible} onClose={this.toggleSupport} />
+        <Support visible={supportVisible} onClose={this.toggleSupport} isSuccess={buttonText === 'Export again'} />
       </div>
     );
   }
