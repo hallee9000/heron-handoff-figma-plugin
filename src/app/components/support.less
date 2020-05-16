@@ -40,6 +40,23 @@
           display: block;
         }
       }
+      .social-copy{
+        position: absolute;
+        left: -18px;
+        top: 30px;
+        width: 60px;
+        padding: 2px;
+        border-radius: 2px;
+        color: #FFF;
+        background-color: rgba(0, 0, 0, 0.85);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.2s, transform 0.2s;
+        &-visible{
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     }
   }
   img{

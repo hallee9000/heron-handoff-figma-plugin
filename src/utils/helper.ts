@@ -41,3 +41,17 @@ export const getBufferData = url => {
       return {err: error};
     });
 };
+
+export const copySomething = (text, callback?) => {
+  const textarea = document.createElement('textarea');
+  textarea.setAttribute('readonly', 'readonly');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.setSelectionRange(0, 9999);
+  if (document.execCommand('copy')) {
+    document.execCommand('copy');
+    callback && callback();
+  }
+  document.body.removeChild(textarea);
+};
