@@ -1,4 +1,4 @@
-import {getAllPagedFrames, getSelectedFrameKeys} from '../utils/frames';
+import {getAllPagedFrames, getCurrentPageFrameKeys, getSelectedFrameKeys} from '../utils/frames';
 import {sendMessage} from '../utils/helper';
 import {exportFrame, exportComponent, exportExportSetting} from '../utils/export';
 import {walkDocument} from '../utils/walk';
@@ -35,11 +35,14 @@ figma.ui.onmessage = async msg => {
       message: {welcomed}
     });
   } else if (msg.type === 'ui:get-frames') {
+    const hasSelections = !!figma.currentPage.selection.length;
     sendMessage({
       type: 'bg:frames-got',
       message: {
         allFrames: getAllPagedFrames(figma.root),
-        currentFrames: getSelectedFrameKeys(figma.currentPage),
+        currentFrames: hasSelections
+          ? getSelectedFrameKeys(figma.currentPage)
+          : getCurrentPageFrameKeys(figma.currentPage),
         currentPageKey: figma.currentPage.id
       }
     });
