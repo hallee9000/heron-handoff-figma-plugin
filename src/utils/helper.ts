@@ -11,7 +11,7 @@ export const asyncForEach = async (array, callback) => {
 
 export const trimFilePath = filePath => filePath.replace(/\//g, '-').replace(/:/g, '-');
 
-export const getFileName = (exportSetting, index) => {
+export const getFileName = (exportSetting, index?) => {
   const {name, suffix, format, constraint} = exportSetting;
   let fileName = suffix ? `${name}-${suffix}` : name;
   if (index !== undefined) {
@@ -54,4 +54,28 @@ export const copySomething = (text, callback?) => {
     callback && callback();
   }
   document.body.removeChild(textarea);
+};
+
+export const sliceName = name => {
+  const namePieces = name.split('.');
+  const format = namePieces.pop();
+  return [namePieces.join('.'), format];
+};
+
+export const renameImages = arr => {
+  const count = {};
+  arr.forEach(function(x, i) {
+    const [m, n] = sliceName(x);
+    if (arr.indexOf(x) !== i) {
+      const c = x in count ? (count[x] = count[x] + 1) : (count[x] = 1);
+      let j = c + 1;
+      let k = m + '-' + j + '.' + n;
+
+      while (arr.indexOf(k) !== -1) {
+        k = m + '-' + ++j + '.' + n;
+      }
+      arr[i] = k;
+    }
+  });
+  return arr;
 };

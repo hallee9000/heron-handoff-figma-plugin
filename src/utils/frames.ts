@@ -51,4 +51,6 @@ export const getCurrentPageFrameKeys = currentPage =>
   currentPage.children.filter(({type, visible}) => type === 'FRAME' && visible).map(frame => frame.id);
 
 export const getSelectedFrameKeys = currentPage =>
-  currentPage.selection.filter(({type, visible}) => type === 'FRAME' && visible).map(frame => frame.id);
+  currentPage.selection
+    .filter(({parent, type, visible}) => parent.type === 'PAGE' && type === 'FRAME' && visible)
+    .map(frame => frame.id);

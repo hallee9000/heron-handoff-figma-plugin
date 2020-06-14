@@ -1,16 +1,17 @@
-import {getAllPagedFrames, getCurrentPageFrameKeys, getSelectedFrameKeys} from '../utils/frames';
-import {sendMessage} from '../utils/helper';
-import {exportFrame, exportComponent, exportExportSetting} from '../utils/export';
-import {walkDocument} from '../utils/walk';
-import {getUserId} from '../utils/identifyUser';
+import {getAllPagedFrames, getCurrentPageFrameKeys, getSelectedFrameKeys} from '@utils/frames';
+import {sendMessage} from '@utils/helper';
+import {exportFrame, exportComponent, exportExportSetting} from '@utils/export';
+import {walkDocument} from '@utils/walk';
+import {getUserId} from '@utils/identifyUser';
 
-let fileData, useHDImages, includeComponents;
+let fileData, exportSettings;
+let includeComponents = false;
 let frameNodes = [],
   exportSettingNodes = [],
   componentNodes = [],
   exportNodes = [];
 
-figma.showUI(__html__, {width: 320, height: 480});
+figma.showUI(__html__, {width: 320, height: 500});
 
 // send mixpanel user id
 getUserId();
@@ -25,15 +26,25 @@ getUserId();
 //   console.log(figma.currentPage.selection)
 // })
 
+figma.clientStorage.getAsync('welcomed').then(isWelcomed => {
+  sendMessage({
+    type: 'bg:check-welcome',
+    message: {isWelcomed}
+  });
+});
+
+figma.clientStorage.getAsync('language').then(language => {
+  sendMessage({
+    type: 'bg:language-got',
+    message: {language}
+  });
+});
+
 figma.ui.onmessage = async msg => {
   if (msg.type === 'ui:set-welcomed') {
     await figma.clientStorage.setAsync('welcomed', true);
-  } else if (msg.type === 'ui:get-welcomed') {
-    const welcomed = await figma.clientStorage.getAsync('welcomed');
-    sendMessage({
-      type: 'bg:welcomed-got',
-      message: {welcomed}
-    });
+  } else if (msg.type === 'ui:set-language') {
+    await figma.clientStorage.setAsync('language', msg.language);
   } else if (msg.type === 'ui:get-frames') {
     const hasSelections = !!figma.currentPage.selection.length;
     sendMessage({
@@ -47,19 +58,27 @@ figma.ui.onmessage = async msg => {
       }
     });
   } else if (msg.type === 'ui:get-document') {
-    const {pagedFrames, selectedFrameKeys, includeComponents: withComponents, useHDImages: useHD} = msg;
-    const data = walkDocument(figma.root, selectedFrameKeys, withComponents);
+    const {pagedFrames, selectedFrameKeys, includeComponents: ics} = msg;
+    includeComponents = ics;
+    const data = walkDocument(figma.root, selectedFrameKeys, includeComponents);
     fileData = data.fileData;
-    includeComponents = withComponents;
-    useHDImages = useHD;
     frameNodes = data.frameNodes;
     exportSettingNodes = data.exportSettingNodes;
     componentNodes = data.componentNodes;
-    exportNodes = frameNodes.concat(exportSettingNodes, includeComponents ? componentNodes : []);
 
     sendMessage({
       type: 'bg:document-got',
-      message: {fileData, pagedFrames, selectedFrameKeys, includeComponents, useHDImages}
+      message: {fileData, pagedFrames, selectedFrameKeys, includeComponents}
+    });
+  } else if (msg.type === 'ui:start-export') {
+    const {originalExportSettings, exportSettings: ess} = msg;
+    exportSettings = ess;
+    exportSettingNodes = exportSettingNodes.filter(
+      (_exportSettingNode, index) => originalExportSettings[index].checked
+    );
+    exportNodes = frameNodes.concat(exportSettingNodes, includeComponents ? componentNodes : []);
+    sendMessage({
+      type: 'bg:export-ok'
     });
   } else if (msg.type === 'ui:export-image') {
     // will post bg:image-exported message
@@ -67,13 +86,13 @@ figma.ui.onmessage = async msg => {
     const {exportType, node} = exportNodes[index];
     switch (exportType) {
       case 'frame':
-        await exportFrame(node, useHDImages);
+        await exportFrame(node);
         break;
       case 'exportSetting':
-        await exportExportSetting(node, fileData.exportSettings, index - frameNodes.length);
+        await exportExportSetting(node, exportSettings, index - frameNodes.length);
         break;
       case 'component':
-        await exportComponent(node, useHDImages);
+        await exportComponent(node);
         break;
     }
   } else if (msg.type === 'ui:close-plugin') {

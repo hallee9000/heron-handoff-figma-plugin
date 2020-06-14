@@ -1,15 +1,18 @@
 .support{
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 300px;
-  margin-bottom: 20px;
+  left: 0;
+  top: 0;
+  width: 320px;
+  height: 100%;
   padding: 20px;
   text-align: center;
   background-color: #FFF;
-  -webkit-box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
+  transform: translateY(100%);
+  transition: transform 0.2s;
   z-index: 1;
+  &.active{
+    transform: translateY(0);
+  }
   .support-social{
     margin-top: 10px;
     margin-bottom: 30px;

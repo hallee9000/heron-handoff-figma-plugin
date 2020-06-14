@@ -986,6 +986,7 @@
   display: -ms-flexbox;
   display: flex;
   width: 100%;
+  padding: 7px 0;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

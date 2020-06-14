@@ -1,0 +1,25 @@
+.selector{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  .selector-tree{
+    flex: 1;
+    overflow: auto;
+  }
+  .selector-actions{
+    padding: 8px 12px;
+    border-top: 1px solid #F3F3F3;
+    .actions-error{
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      color: #e23008;
+      background-color: #ffe9e2;
+      border-radius: 6px;
+    }
+    >button{
+      width: 100%;
+    }
+  }
+}

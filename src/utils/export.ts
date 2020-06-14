@@ -1,4 +1,4 @@
-import {sendMessage, trimFilePath, getFileName} from '../utils/helper';
+import {sendMessage, trimFilePath} from '../utils/helper';
 
 const handleError = node => {
   const errorMessage = `Error occurs when exporting ${node.name}, please check it.`;
@@ -13,13 +13,13 @@ const handleError = node => {
 };
 
 // start export frames's image
-export const exportFrame = async (frameNode, useHDImages) => {
+export const exportFrame = async frameNode => {
   try {
     const imgData = await frameNode.exportAsync({
       format: 'PNG',
       constraint: {
         type: 'SCALE',
-        value: useHDImages ? 2 : 1
+        value: 2
       }
     });
     const fileName = trimFilePath(`${frameNode.id}.png`);
@@ -43,9 +43,11 @@ export const exportFrame = async (frameNode, useHDImages) => {
 export const exportExportSetting = async (exportNode, exportSettings, index) => {
   try {
     const exportSetting = {...exportSettings[index]};
-    const fileName = getFileName(exportSetting, index);
+    const fileName = exportSetting.rename;
+    delete exportSetting.checked;
     delete exportSetting.id;
     delete exportSetting.name;
+    delete exportSetting.rename;
     const imgData = await exportNode.exportAsync(exportSetting);
     sendMessage({
       type: 'bg:image-exported',
@@ -57,19 +59,19 @@ export const exportExportSetting = async (exportNode, exportSettings, index) => 
       }
     });
   } catch (err) {
-    // console.log(err)
+    console.log(err);
     handleError(exportNode);
   }
 };
 
 // start export components's image
-export const exportComponent = async (componentNode, useHDImages) => {
+export const exportComponent = async componentNode => {
   try {
     const imgData = await componentNode.exportAsync({
       format: 'PNG',
       constraint: {
         type: 'SCALE',
-        value: useHDImages ? 2 : 1
+        value: 2
       }
     });
     const fileName = trimFilePath(`${componentNode.id}.png`);

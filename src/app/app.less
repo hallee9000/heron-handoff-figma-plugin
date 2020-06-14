@@ -1,3 +1,28 @@
 .app{
   height: 100%;
+  .app-loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    svg{
+      color: #EEE;
+      animation: rotating 1.2s infinite;
+    }
+  }
+  .app-wrapper{
+    display: none;
+    position: relative;
+    height: calc(100% - 36px);
+    overflow: hidden;
+    &-visible{
+      display: block;
+    }
+  }
+}
+
+@keyframes rotating {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

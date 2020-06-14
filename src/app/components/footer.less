@@ -1,0 +1,30 @@
+.app-footer{
+  display: flex;
+  padding: 3px 6px;
+  justify-content: flex-end;
+  span, a{
+    padding: 7px;
+    border-radius: 6px;
+    color: #333;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    &:hover{
+      background-color: #F3F3F3;
+    }
+    svg{
+      display: block;
+    }
+  }
+  span{
+    position: relative;
+    select{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+}

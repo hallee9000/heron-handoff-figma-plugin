@@ -1,0 +1,44 @@
+.exports{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #FFF;
+  transform: translateY(100%);
+  transition: transform 0.2s;
+  z-index: 1;
+  &-visible{
+    transform: translateY(0);
+  }
+  .exports-header{
+    padding: 4px 12px;
+    border-bottom: 1px solid #F3F3F3;
+    .header-empty{
+      color: #999;
+    }
+  }
+  .exports-images{
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    padding: 4px 12px;
+    overflow: auto;
+    >li{
+      transition: background-color 0.2s;
+      &:hover{
+        background-color: #F3F3F3;
+      }
+    }
+  }
+  .exports-actions{
+    padding: 4px 12px;
+    box-shadow: 0 6px 36px rgba(0, 0, 0, 0.12);
+    .button{
+      position: relative;
+      width: 100%;
+    }
+  }
+}

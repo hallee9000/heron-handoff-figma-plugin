@@ -8,6 +8,16 @@
     "experimentalDecorators": true,
     "removeComments": true,
     "noImplicitAny": false,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
+    "paths": {
+        "@components/*": ["app/components/*"],
+        "@pages/*": ["app/pages/*"],
+        "@assets/*": ["app/assets/*"],
+        "@lang/*": ["app/lang/*"],
+        "@utils/*": ["utils/*"],
+    }
   }
 }
