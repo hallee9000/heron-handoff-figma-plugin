@@ -42,7 +42,7 @@ export default ({messageData, onLangChange, onSupportClick}) => {
             </select>
             <Globe size={16} />
           </span>
-          <a href="https://figmacn.com/handoff-landing" target="_blank" title={langData['docs']}>
+          <a href={langData['help link']} target="_blank" title={langData['docs']}>
             <Docs size={16} />
           </a>
           <span title={langData['buy coffee']} onClick={onSupportClick}>

@@ -2,6 +2,7 @@
   "en": {
     "welcome title": "This plugin can help you export developer handoff files with design specs.",
     "learn more": "Learn more",
+    "help link": "https://figmacn.com/handoff-landing",
     "next step": "Next Step",
     "docs": "Docs",
     "buy coffee": "Buy me a coffee",
@@ -38,6 +39,7 @@
   "zh": {
     "welcome title": "这是一个可以帮助你生成设计标注文件的插件，方便交付给开发。",
     "learn more": "了解更多",
+    "help link": "https://mp.weixin.qq.com/s/H01fw3bzR8BxcuV74TWPtw",
     "next step": "下一步",
     "docs": "文档",
     "buy coffee": "请我喝杯咖啡",

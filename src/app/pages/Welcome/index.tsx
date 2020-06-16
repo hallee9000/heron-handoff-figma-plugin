@@ -41,7 +41,7 @@ export default ({messageData, onChecked, onWelcomed}) => {
           <h2 className="type type--pos-xlarge-bold">Juuust Handoff</h2>
           <div className="welcome-introduction type type--pos-small-normal">
             {langData['welcome title']}{' '}
-            <a href="https://figmacn.com/handoff-landing" target="_blank">
+            <a href={langData['help link']} target="_blank">
               {langData['learn more']}
             </a>
           </div>
