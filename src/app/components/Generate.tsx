@@ -103,7 +103,7 @@ export default ({data, exportSettings, originalExportSettings, messageData, onSe
       setFileName('');
       setPercentageText(100, 'zip processing');
       zip.generateAsync({type: 'blob'}).then(content => {
-        setPercentageText(0, 'export again');
+        setPercentageText(0, 'over');
         saveAs(content, `${trimFilePath(documentName)}.zip`);
         onSecceed();
         mixpanel.track('Juuust Handoff', {Action: 'Exporting completed'});
@@ -133,6 +133,10 @@ export default ({data, exportSettings, originalExportSettings, messageData, onSe
           {errorMessage ? (
             <button className="button button--secondary" onClick={closePlugin}>
               {langData['close check']}
+            </button>
+          ) : buttonText === 'over' ? (
+            <button className="button button--secondary" onClick={closePlugin}>
+              {langData['close plugin']}
             </button>
           ) : (
             <button className="button button--primary" onClick={handleGenerate}>
