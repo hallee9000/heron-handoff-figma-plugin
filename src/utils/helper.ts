@@ -17,7 +17,8 @@ export const getFileName = (exportSetting, index?) => {
   if (index !== undefined) {
     fileName += `-${index}`;
   }
-  const scale = format === 'SVG' ? '' : `@${constraint.value}x`;
+  const isWithoutConstraint = format === 'SVG' || format === 'PDF';
+  const scale = isWithoutConstraint ? '' : `@${constraint.value}x`;
   const fileFormat = format.toLowerCase();
   fileName = fileName.replace(/ /g, '-');
   return `${trimFilePath(fileName)}${scale}.${fileFormat}`;
