@@ -48,6 +48,7 @@ export const exportExportSetting = async (exportNode, exportSettings, index) => 
     delete exportSetting.id;
     delete exportSetting.name;
     delete exportSetting.rename;
+    delete exportSetting.isRepeated;
     const imgData = await exportNode.exportAsync(exportSetting);
     sendMessage({
       type: 'bg:image-exported',

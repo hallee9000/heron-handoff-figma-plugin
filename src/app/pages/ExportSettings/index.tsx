@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {LangContext} from '@lang/lang-context';
 import {getFileName, renameImages} from '@utils/helper';
+import {Warning} from '@components/icons';
 import Generate from '@components/Generate';
 import cn from 'classnames';
 
@@ -33,11 +34,14 @@ export default ({messageData, onSecceed}) => {
     setAllSelected(checkedExportSettings(exportSettings).length === exportSettings.length);
   }, [exportSettings]);
 
-  const getRenamedExportSettings = exportSettings =>
-    renameImages(exportSettings.map(exportSetting => getFileName(exportSetting))).map((rename, index) => ({
+  const getRenamedExportSettings = exportSettings => {
+    const originalNames = exportSettings.map(exportSetting => getFileName(exportSetting));
+    return renameImages(originalNames).map((rename, index) => ({
       ...exportSettings[index],
+      isRepeated: originalNames[index] !== rename,
       rename
     }));
+  };
 
   const toggleCheckAll = (exportSettings, flag) => {
     setExportSettings(exportSettings.map(exportSetting => ({...exportSetting, checked: flag})));
@@ -99,7 +103,12 @@ export default ({messageData, onSecceed}) => {
                     checked={exportSetting.checked}
                     onChange={handleCheck}
                   />
-                  <label className="checkbox__label" htmlFor={`export-${index}`}>
+                  <label
+                    className="checkbox__label"
+                    htmlFor={`export-${index}`}
+                    title={exportSetting.isRepeated && langData['repeated']}
+                  >
+                    {exportSetting.isRepeated && <Warning size={12} />}
                     {exportSetting.rename}
                   </label>
                 </div>

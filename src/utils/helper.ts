@@ -63,20 +63,21 @@ export const sliceName = name => {
   return [namePieces.join('.'), format];
 };
 
-export const renameImages = arr => {
+export const renameImages = names => {
   const count = {};
-  arr.forEach(function(x, i) {
+  const namesArray = [...names];
+  namesArray.forEach(function(x, i) {
     const [m, n] = sliceName(x);
-    if (arr.indexOf(x) !== i) {
+    if (namesArray.indexOf(x) !== i) {
       const c = x in count ? (count[x] = count[x] + 1) : (count[x] = 1);
-      let j = c + 1;
+      let j = c;
       let k = m + '-' + j + '.' + n;
 
-      while (arr.indexOf(k) !== -1) {
+      while (namesArray.indexOf(k) !== -1) {
         k = m + '-' + ++j + '.' + n;
       }
-      arr[i] = k;
+      namesArray[i] = k;
     }
   });
-  return arr;
+  return namesArray;
 };
