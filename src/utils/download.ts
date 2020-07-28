@@ -1,4 +1,5 @@
 import {asyncForEach, getSourceCode, getBufferData} from './helper';
+// const baseUrl = 'https://figma-handoff-cors.herokuapp.com/https://leadream.github.io/figma-handoff/';
 const baseUrl = 'https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com/';
 
 export const getScriptSrcs = indexSourceCode => {

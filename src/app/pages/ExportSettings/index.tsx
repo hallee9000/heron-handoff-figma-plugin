@@ -106,7 +106,7 @@ export default ({messageData, onSecceed}) => {
                   <label
                     className="checkbox__label"
                     htmlFor={`export-${index}`}
-                    title={exportSetting.isRepeated && langData['repeated']}
+                    title={exportSetting.isRepeated ? langData['repeated'] : ''}
                   >
                     {exportSetting.isRepeated && <Warning size={12} />}
                     {exportSetting.rename}
