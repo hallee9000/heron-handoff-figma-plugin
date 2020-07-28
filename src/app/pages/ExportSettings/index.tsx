@@ -77,6 +77,10 @@ export default ({messageData, onSecceed}) => {
             ) : (
               <div className="header-empty type type--pos-small-normal">{langData['no export']}</div>
             )}
+            <div className="type type--pos-small-normal header-rename-explain">
+              <Warning size={12} />
+              {langData['export rename explain']}
+            </div>
             {!!exportSettings.length && (
               <div className="checkbox">
                 <input
