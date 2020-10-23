@@ -17,7 +17,7 @@ export default ({messageData, onLangChange, onSupportClick}) => {
     const {type, message} = messageData;
     if (type === 'bg:language-got') {
       const {language} = message;
-      if (language) {
+      if (language && ['en', 'zh'].indexOf(language) > -1) {
         setLang(language);
         onLangChange(language);
       }
