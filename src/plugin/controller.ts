@@ -84,6 +84,7 @@ figma.ui.onmessage = async msg => {
     // will post bg:image-exported message
     const {index} = msg;
     const {exportType, node} = exportNodes[index];
+    console.log(node);
     switch (exportType) {
       case 'frame':
         await exportFrame(node);

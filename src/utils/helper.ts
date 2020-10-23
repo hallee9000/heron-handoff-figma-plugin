@@ -81,3 +81,15 @@ export const renameImages = names => {
   });
   return namesArray;
 };
+
+export const isVisibleNode = node => {
+  if (node && node.parent) {
+    if (node.visible && node.parent.type !== 'PAGE') {
+      return isVisibleNode(node.parent);
+    } else {
+      return node.visible;
+    }
+  } else {
+    return false;
+  }
+};

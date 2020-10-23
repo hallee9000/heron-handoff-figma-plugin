@@ -1,3 +1,4 @@
+import {isVisibleNode} from './helper';
 import {getTextNodeStyle} from './text';
 import {getFillStyle, getTextStyle, getEffectStyle, getGridStyle} from './style';
 
@@ -173,7 +174,8 @@ export const walkDocument = (document, selectedFrameKeys, includeComponents) => 
     handleCornerRadius(treeNode, node);
     handleBoundingBox(treeNode, node, type);
     handleExportSettings(treeNode, node, imageExportSettings => {
-      if (!isSteppingComponent && node.visible && !node.isMask) {
+      // should not export if isn't visible (also if a ancestor is not visible) or is mask
+      if (!isSteppingComponent && isVisibleNode(node) && !node.isMask) {
         imageExportSettings.map(imageExportSetting => {
           exportSettingNodes.push({exportType: 'exportSetting', node});
           exportSettings.push({...imageExportSetting, id: node.id, name: node.name});
