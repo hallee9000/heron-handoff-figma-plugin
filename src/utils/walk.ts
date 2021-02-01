@@ -1,4 +1,4 @@
-import {isVisibleNode} from './helper';
+import {isVisibleNode, getFileName, getConventionName, renameImages} from './helper';
 import {getTextNodeStyle} from './text';
 import {getFillStyle, getTextStyle, getEffectStyle, getGridStyle} from './style';
 
@@ -150,7 +150,8 @@ const handleSpecialNode = (treeNode, node, type) => {
 };
 
 // walk file to get file data
-export const walkDocument = (document, selectedFrameKeys, includeComponents) => {
+export const walkDocument = (document, selectedFrameKeys, globalData) => {
+  const {includeComponents, convention, overrideRepeatedImages, imagesConvention} = globalData;
   const fileData: FileData = {
     isFromPlugin: true,
     name: document.name,
@@ -159,13 +160,13 @@ export const walkDocument = (document, selectedFrameKeys, includeComponents) => 
   let componentNodes = [];
   const frameNodes = [];
   const exportSettingNodes = [];
-  const exportSettings = [];
+  let exportSettings = [];
 
   const step = (node, isSteppingComponent?) => {
     const type = nodeTypeMaps[node.type] || node.type;
     const treeNode: TreeNode = {
       id: node.id,
-      name: node.name,
+      name: isSteppingComponent ? getConventionName(node.name, convention) : node.name,
       type
     };
     assignProperties(treeNode, node);
@@ -173,12 +174,19 @@ export const walkDocument = (document, selectedFrameKeys, includeComponents) => 
     handleStyle(treeNode, node);
     handleCornerRadius(treeNode, node);
     handleBoundingBox(treeNode, node, type);
-    handleExportSettings(treeNode, node, imageExportSettings => {
+    handleExportSettings(treeNode, node, nodeExportSettings => {
       // should not export if isn't visible (also if a ancestor is not visible) or is mask
       if (!isSteppingComponent && isVisibleNode(node) && !node.isMask) {
-        imageExportSettings.map(imageExportSetting => {
-          exportSettingNodes.push({exportType: 'exportSetting', node});
-          exportSettings.push({...imageExportSetting, id: node.id, name: node.name});
+        nodeExportSettings.map(nodeExportSetting => {
+          const extendedExportSetting = {...nodeExportSetting, id: node.id, name: node.name};
+          let exportedImageName = getFileName(extendedExportSetting, imagesConvention);
+          extendedExportSetting.fileName = exportedImageName;
+          if (
+            !(overrideRepeatedImages && exportSettings.map(({fileName}) => fileName).indexOf(exportedImageName) > -1)
+          ) {
+            exportSettings.push(extendedExportSetting);
+            exportSettingNodes.push({exportType: 'exportSetting', node});
+          }
         });
       }
     });
@@ -198,21 +206,26 @@ export const walkDocument = (document, selectedFrameKeys, includeComponents) => 
 
   // handle styles
   fileData.styles = {
-    FILL: figma.getLocalPaintStyles().map(style => getFillStyle(style)),
-    TEXT: figma.getLocalTextStyles().map(style => getTextStyle(style)),
-    EFFECT: figma.getLocalEffectStyles().map(style => getEffectStyle(style)),
-    GRID: figma.getLocalGridStyles().map(style => getGridStyle(style))
+    FILL: figma.getLocalPaintStyles().map(style => getFillStyle(style, convention)),
+    TEXT: figma.getLocalTextStyles().map(style => getTextStyle(style, convention)),
+    EFFECT: figma.getLocalEffectStyles().map(style => getEffectStyle(style, convention)),
+    GRID: figma.getLocalGridStyles().map(style => getGridStyle(style, convention))
   };
   // step in components
   componentNodes = document
     .findAll(c => c.type === 'COMPONENT' && c.visible)
     .map(node => ({exportType: 'component', node}));
   fileData.components = componentNodes.map(({node}) =>
-    includeComponents ? step(node, true) : {id: node.id, name: node.name, description: node.description}
+    includeComponents
+      ? step(node, true)
+      : {id: node.id, name: getConventionName(node.name, convention), description: node.description}
   );
   // start to step in document
   fileData.document = step(document);
+  if (!overrideRepeatedImages) {
+    const renamedNames = renameImages(exportSettings.map(({fileName}) => fileName));
+    exportSettings = exportSettings.map((exportSetting, index) => ({...exportSetting, fileName: renamedNames[index]}));
+  }
   fileData.exportSettings = exportSettings;
-
   return {fileData, frameNodes, exportSettingNodes, componentNodes};
 };

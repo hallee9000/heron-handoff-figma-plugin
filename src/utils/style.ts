@@ -1,18 +1,19 @@
+import {getConventionName} from './helper';
 import {FONT_WEIGHTS} from './text';
 
-export const getFillStyle = style => ({
+export const getFillStyle = (style, convention) => ({
   id: style.id,
   key: style.key,
-  name: style.name,
+  name: getConventionName(style.name, convention),
   description: style.description,
   styleType: 'FILL',
   items: style.paints
 });
 
-export const getTextStyle = style => ({
+export const getTextStyle = (style, convention) => ({
   id: style.id,
   key: style.key,
-  name: style.name,
+  name: getConventionName(style.name, convention),
   description: style.description,
   styleType: 'TEXT',
   items: {
@@ -27,19 +28,19 @@ export const getTextStyle = style => ({
   }
 });
 
-export const getEffectStyle = style => ({
+export const getEffectStyle = (style, convention) => ({
   id: style.id,
   key: style.key,
-  name: style.name,
+  name: getConventionName(style.name, convention),
   description: style.description,
   styleType: 'EFFECT',
   items: style.effects
 });
 
-export const getGridStyle = style => ({
+export const getGridStyle = (style, convention) => ({
   id: style.id,
   key: style.key,
-  name: style.name,
+  name: getConventionName(style.name, convention),
   description: style.description,
   styleType: 'GRID',
   items: style.layoutGrids

@@ -1,0 +1,58 @@
+.generating-modal-overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(#FFF, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+  .generating-modal{
+    width: 300px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 1px 0 16px 0 rgba(0,0,0,.16);
+    button{
+      position: relative;
+      width: 100%;
+      &:disabled {
+        background-color: rgba(#18a0fb, 0.9);
+      }
+      &.btn-support {
+        margin-bottom: 8px;
+      }
+      div{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: #0c82d2;
+        border-radius: 5px;
+        z-index: 0;
+      }
+      span{
+        position: relative;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        z-index: 1;
+      }
+    }
+    .modal-tip{
+      margin-bottom: 8px;
+    }
+    .modal-error{
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      color: #e23008;
+      background-color: #ffe9e2;
+      border-radius: 6px;
+    }
+  }
+}

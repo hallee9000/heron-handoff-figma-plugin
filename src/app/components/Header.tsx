@@ -1,6 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
-import {LangContext} from '@lang/lang-context';
+import {withTranslation} from '@app/context';
 
 import './header.less';
 
@@ -10,9 +10,10 @@ export interface Props {
   expandedKeys: any[];
   onToggleExpand: (shouldExpand) => void;
   onSelectAllChange: (isChecked) => void;
+  t: (key) => string;
 }
 
-export default class Header extends React.Component<Props> {
+class Header extends React.Component<Props> {
   state = {
     isAllSelected: this.props.isAllSelected
   };
@@ -31,46 +32,44 @@ export default class Header extends React.Component<Props> {
     }
   }
   render() {
-    const {pageKeys, expandedKeys, onToggleExpand} = this.props;
+    const {pageKeys, expandedKeys, onToggleExpand, t} = this.props;
     const {isAllSelected} = this.state;
     return (
-      <LangContext.Consumer>
-        {langData => (
-          <div className="selector-header">
-            <div className="checkbox">
-              <input
-                id="isAllSelected"
-                type="checkbox"
-                className="checkbox__box"
-                checked={isAllSelected}
-                onChange={this.handleSelectAllChange}
-              />
-              <label className="checkbox__label" htmlFor="isAllSelected">
-                {isAllSelected ? langData['deselect all'] : langData['select all']}
-              </label>
-            </div>
-            <div className="stretched-box" />
-            <div
-              className={cn('header-action header-expand type type--pos-small-normal', {
-                'header-action-disabled': expandedKeys.length === pageKeys.length
-              })}
-              onClick={() => onToggleExpand(true)}
-            >
-              <span className="header-action-arrow" />
-              <span>{langData['expand']}</span>
-            </div>
-            <div
-              className={cn('header-action header-collapse type type--pos-small-normal', {
-                'header-action-disabled': expandedKeys.length === 0
-              })}
-              onClick={() => onToggleExpand(false)}
-            >
-              <span className="header-action-arrow" />
-              <span>{langData['collapse']}</span>
-            </div>
-          </div>
-        )}
-      </LangContext.Consumer>
+      <div className="selector-header">
+        <div className="checkbox">
+          <input
+            id="isAllSelected"
+            type="checkbox"
+            className="checkbox__box"
+            checked={isAllSelected}
+            onChange={this.handleSelectAllChange}
+          />
+          <label className="checkbox__label" htmlFor="isAllSelected">
+            {isAllSelected ? t('deselect all') : t('select all')}
+          </label>
+        </div>
+        <div className="stretched-box" />
+        <div
+          className={cn('header-action header-expand type type--pos-small-normal', {
+            'header-action-disabled': expandedKeys.length === pageKeys.length
+          })}
+          onClick={() => onToggleExpand(true)}
+        >
+          <span className="header-action-arrow" />
+          <span>{t('expand')}</span>
+        </div>
+        <div
+          className={cn('header-action header-collapse type type--pos-small-normal', {
+            'header-action-disabled': expandedKeys.length === 0
+          })}
+          onClick={() => onToggleExpand(false)}
+        >
+          <span className="header-action-arrow" />
+          <span>{t('collapse')}</span>
+        </div>
+      </div>
     );
   }
 }
+
+export default withTranslation(Header);

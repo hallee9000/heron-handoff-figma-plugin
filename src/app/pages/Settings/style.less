@@ -1,4 +1,4 @@
-.exports{
+.settings{
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -13,7 +13,7 @@
   &-visible{
     transform: translateY(0);
   }
-  .exports-header{
+  .settings-header{
     padding: 4px 12px;
     border-bottom: 1px solid #F3F3F3;
     .header-empty{
@@ -28,32 +28,18 @@
       }
     }
   }
-  .exports-images{
+  .settings-blocks{
     flex: 1;
-    list-style: none;
-    margin: 0;
-    padding: 4px 12px;
-    overflow: auto;
-    >li{
-      transition: background-color 0.2s;
-      &:hover{
-        background-color: #F3F3F3;
-      }
-      .checkbox__label{
-        align-items: center;
-        svg{
-          margin-right: 4px;
-          color: #FF6D30;
-        }
-      }
+    .settings-block{
+      padding: 8px 12px;
     }
   }
-  .exports-actions{
-    padding: 4px 12px;
-    box-shadow: 0 6px 36px rgba(0, 0, 0, 0.12);
+  .settings-actions{
+    padding: 8px 12px;
+    text-align: right;
+    border-top: 1px solid #F3F3F3;
     .button{
-      position: relative;
-      width: 100%;
+      margin-left: 8px;
     }
   }
 }

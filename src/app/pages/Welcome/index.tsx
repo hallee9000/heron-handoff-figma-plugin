@@ -1,17 +1,17 @@
 import React, {useEffect} from 'react';
-import cn from 'classnames';
-import {LangContext} from '@lang/lang-context';
-import mixpanel from '@utils/mixpanel';
+import {withGlobalContextConsumer, withTranslation} from '@app/context';
 
 import './style.less';
 
 export interface Props {
+  isWaiting: boolean;
   messageData: any;
   onChecked: () => void;
   onWelcomed: () => void;
+  t: (key) => string;
 }
 
-export default ({messageData, onChecked, onWelcomed}) => {
+const Welcome = ({isWaiting, messageData, onChecked, onWelcomed, t}: Props) => {
   const getFrames = () => {
     onWelcomed();
     parent.postMessage({pluginMessage: {type: 'ui:set-welcomed'}}, '*');
@@ -27,29 +27,25 @@ export default ({messageData, onChecked, onWelcomed}) => {
         parent.postMessage({pluginMessage: {type: 'ui:get-frames'}}, '*');
       }
     }
-    if (type === 'bg:mixpanel-user') {
-      const {userId} = message;
-      mixpanel.identify(userId);
-    }
   }, [messageData.type]);
 
   return (
-    <LangContext.Consumer>
-      {langData => (
-        <div className={cn('welcome')}>
-          <img src="https://figmacn.com/handoff/welcome.png" />
-          <h2 className="type type--pos-xlarge-bold">Juuust Handoff</h2>
-          <div className="welcome-introduction type type--pos-small-normal">
-            {langData['welcome title']}{' '}
-            <a href={langData['help link']} target="_blank">
-              {langData['learn more']}
-            </a>
-          </div>
-          <button className="button button--primary" onClick={getFrames}>
-            {langData['next step']}
-          </button>
+    !isWaiting && (
+      <div className="welcome">
+        <img src="https://figmacn.com/handoff/welcome.png" />
+        <h2 className="type type--pos-xlarge-bold">Juuust Handoff</h2>
+        <div className="welcome-introduction type type--pos-small-normal">
+          {t('welcome title')}{' '}
+          <a href={t('help link')} target="_blank">
+            {t('learn more')}
+          </a>
         </div>
-      )}
-    </LangContext.Consumer>
+        <button className="button button--primary" onClick={getFrames}>
+          {t("let's go")}
+        </button>
+      </div>
+    )
   );
 };
+
+export default withGlobalContextConsumer(withTranslation(Welcome));

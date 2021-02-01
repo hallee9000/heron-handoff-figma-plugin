@@ -40,14 +40,13 @@ export const exportFrame = async frameNode => {
 };
 
 // start export exportSettings' image
-export const exportExportSetting = async (exportNode, exportSettings, index) => {
+export const exportSlice = async (exportNode, exportSettings, index) => {
   try {
     const exportSetting = {...exportSettings[index]};
-    const fileName = exportSetting.rename;
-    delete exportSetting.checked;
+    const {fileName} = exportSetting;
     delete exportSetting.id;
     delete exportSetting.name;
-    delete exportSetting.rename;
+    delete exportSetting.fileName;
     delete exportSetting.isRepeated;
     const imgData = await exportNode.exportAsync(exportSetting);
     sendMessage({

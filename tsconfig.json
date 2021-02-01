@@ -13,11 +13,15 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "src",
     "paths": {
+        "@app/*": ["app/*"],
         "@components/*": ["app/components/*"],
         "@pages/*": ["app/pages/*"],
         "@assets/*": ["app/assets/*"],
         "@lang/*": ["app/lang/*"],
         "@utils/*": ["utils/*"],
     }
-  }
+  },
+  "exclude": [
+    "ExportSettings/*"
+  ]
 }

@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from 'react';
+import cn from 'classnames';
 import Tree from 'rc-tree';
-import {LangContext} from '@lang/lang-context';
 import Header from '@components/Header';
-import {getFlattenedFrameKeys, getSelectedPagedFrames, getPageKeys} from '@utils/frames';
+import {getFlattenedFrameKeys, getPageKeys} from '@utils/frames';
+import {withGlobalContextConsumer, withTranslation} from '@app/context';
 
 import './style.less';
 
 export interface Props {
+  globalData: any;
+  changeGlobalData: (property, value) => void;
   messageData: any;
+  onNext: (allFrames, checkedKeys) => void;
+  t: (key) => string;
 }
 
-export default ({messageData}) => {
+const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props) => {
   const [allFrames, setAllFrames] = useState([]);
   const [currentFrames, setCurrentFrames] = useState([]);
   const [currentPageKey, setCurrentPageKey] = useState();
@@ -18,8 +23,6 @@ export default ({messageData}) => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [isAllSelected, setIsAllSelected] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [includeComponents, setIncludeComponents] = useState(false);
 
   // effects
   useEffect(() => {
@@ -60,67 +63,42 @@ export default ({messageData}) => {
     setExpandedKeys(shouldExpand ? keys.page : []);
   };
 
-  const handleIncludeComponents = e => {
-    setIncludeComponents(e.target.checked);
-  };
-
-  const handleGetDocument = () => {
-    const pagedFrames = getSelectedPagedFrames(allFrames, checkedKeys);
-    const selectedFrameKeys = getFlattenedFrameKeys(allFrames, checkedKeys);
-    setIsProcessing(true);
-    setTimeout(() => {
-      parent.postMessage(
-        {pluginMessage: {type: 'ui:get-document', pagedFrames, selectedFrameKeys, includeComponents}},
-        '*'
-      );
-    }, 100);
+  const showSettings = () => {
+    changeGlobalData('view', 'settings');
+    onNext(allFrames, checkedKeys);
   };
 
   return (
-    <LangContext.Consumer>
-      {langData => (
-        <div className="selector">
-          <Header
-            isAllSelected={isAllSelected}
-            pageKeys={keys.page}
-            expandedKeys={expandedKeys}
-            onToggleExpand={toggleExpandAll}
-            onSelectAllChange={handleSelectAll}
-          />
-          <div className="selector-tree">
-            <Tree
-              checkable
-              selectable={false}
-              checkedKeys={checkedKeys}
-              expandedKeys={expandedKeys}
-              onExpand={handleExpand}
-              showIcon={false}
-              treeData={allFrames}
-              onCheck={handleTreeOptionCheck}
-            />
-          </div>
-          <div className="selector-actions">
-            {!!allFrames.length && !checkedKeys.length && (
-              <div className="actions-error type type--pos-small-bold">{langData['at least']}</div>
-            )}
-            <div className="checkbox">
-              <input
-                type="checkbox"
-                id="includeComponents"
-                className="checkbox__box"
-                checked={includeComponents}
-                onChange={handleIncludeComponents}
-              />
-              <label className="checkbox__label" htmlFor="includeComponents">
-                {langData['include components']}
-              </label>
-            </div>
-            <button className="button button--primary" onClick={handleGetDocument} disabled={isProcessing}>
-              {isProcessing ? langData['processing'] : langData['start']}
-            </button>
-          </div>
-        </div>
-      )}
-    </LangContext.Consumer>
+    <div className={cn('selector', {visible: globalData.view === 'selector'})}>
+      <Header
+        isAllSelected={isAllSelected}
+        pageKeys={keys.page}
+        expandedKeys={expandedKeys}
+        onToggleExpand={toggleExpandAll}
+        onSelectAllChange={handleSelectAll}
+      />
+      <div className="selector-tree">
+        <Tree
+          checkable
+          selectable={false}
+          checkedKeys={checkedKeys}
+          expandedKeys={expandedKeys}
+          onExpand={handleExpand}
+          showIcon={false}
+          treeData={allFrames}
+          onCheck={handleTreeOptionCheck}
+        />
+      </div>
+      <div className="selector-actions">
+        {!!allFrames.length && !checkedKeys.length && (
+          <div className="actions-error type type--pos-small-bold">{t('at least')}</div>
+        )}
+        <button className="button button--primary" onClick={showSettings}>
+          {t('next step')}
+        </button>
+      </div>
+    </div>
   );
 };
+
+export default withGlobalContextConsumer(withTranslation(Selector));
