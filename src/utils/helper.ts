@@ -26,7 +26,7 @@ export const trimFilePath = filePath =>
   filePath
     .replace(/\//g, '-')
     .replace(/:/g, '-')
-    .replace(/ /g, '-');
+    .replace(/ /g, '');
 
 export const getFileName = (exportSetting, imagesConvention?) => {
   const {name, suffix, format, constraint} = exportSetting;
@@ -40,6 +40,7 @@ export const getFileName = (exportSetting, imagesConvention?) => {
 };
 
 export const getConventionName = (name, convention) => {
+  console.log(name);
   switch (convention) {
     case 1:
       return trimFilePath(name).replace(/-/g, '_');
