@@ -16,8 +16,25 @@ const Mark = ({globalData, changeGlobalData, t}) => {
   const units = getUnits(platform);
   const handleChange = e => {
     const {name, value} = e.target;
-    changeGlobalData(name, Math.floor(value - 0)); // avoid decimals when remBase
-    changeSettingsAndNotifyBackground(globalData, {[name]: Math.floor(value - 0)});
+    const changedSettings: any = {};
+    if (name === 'platform') {
+      const currentPlatform = value - 0;
+      const unitRange = unitMaps[currentPlatform];
+      const resolutionRange = resolutions[currentPlatform];
+      if (unitRange.indexOf(unit) < 0) {
+        // unit = unitRange[0]
+        changeGlobalData('unit', unitRange[0]);
+        changedSettings.unit = unitRange[0];
+      }
+      if (!resolutionRange[resolution]) {
+        // resolution = 0
+        changeGlobalData('resolution', 0);
+        changedSettings.resolution = 0;
+      }
+    }
+    changedSettings[name] = Math.floor(value - 0); // avoid decimals when remBase
+    changeGlobalData(changedSettings);
+    changeSettingsAndNotifyBackground(globalData, changedSettings);
   };
   return (
     <div className="settings-block">

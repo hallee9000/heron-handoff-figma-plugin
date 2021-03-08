@@ -15,7 +15,7 @@ export interface IGlobalContext {
     overrideRepeatedImages: boolean;
     exportWebP: boolean;
   };
-  changeGlobalData: (property: string, value: any) => void;
+  changeGlobalData: (property: string | any, value?: any) => void;
 }
 
 const defaultGlobalContext: IGlobalContext = {
@@ -41,7 +41,13 @@ export const withGlobalContextProvider = Component => {
   return props => {
     const [globalData, setGlobalData] = useState(defaultGlobalContext.globalData);
     const handleChangeGlobalData = (property, value) => {
-      const newGlobalData = {...globalData, [property]: value};
+      let changedSettings;
+      if (value === undefined) {
+        changedSettings = property;
+      } else {
+        changedSettings = {[property]: value};
+      }
+      const newGlobalData = {...globalData, ...changedSettings};
       setGlobalData(newGlobalData);
     };
     const initializeGlobalData = data => {
