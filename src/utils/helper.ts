@@ -40,7 +40,6 @@ export const getFileName = (exportSetting, imagesConvention?) => {
 };
 
 export const getConventionName = (name, convention) => {
-  console.log(name);
   switch (convention) {
     case 1:
       return trimFilePath(name).replace(/-/g, '_');

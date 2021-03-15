@@ -1,7 +1,7 @@
 import {sendMessage, trimFilePath} from '../utils/helper';
 
-const handleError = node => {
-  const errorMessage = `Error occurs when exporting ${node.name}, please check it.`;
+export const handleError = node => {
+  const errorMessage = node.name;
   sendMessage({
     type: 'bg:error',
     message: {

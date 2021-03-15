@@ -1,5 +1,5 @@
 node_modules
 dist
-settings.json
+# settings.json
 yarn-error.log
 src/keys.ts

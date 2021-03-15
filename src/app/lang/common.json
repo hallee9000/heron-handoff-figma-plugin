@@ -41,6 +41,8 @@
     "exporting and don't close": "Exporting, please don't close plugin",
     "exporting finished": "Exporting finished. Have a good day.",
     "share or support me": "Share or support me",
+    "error occurs when parsing": "Error occurs when parsing ",
+    "please check it": ", please check it (already selected).",
     "close plugin": "Close plugin"
   },
   "zh": {
@@ -85,6 +87,8 @@
     "exporting and don't close": "正在导出，请不要关闭插件。",
     "exporting finished": "导出完毕，用得愉快。",
     "share or support me": "分享或支持我",
+    "error occurs when parsing": "在解析 ",
+    "please check it": " 时出了点问题，请检查该图层（已选中）。",
     "close plugin": "关闭插件"
   }
 }

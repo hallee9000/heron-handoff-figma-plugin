@@ -1,6 +1,7 @@
 import {isVisibleNode, getFileName, getConventionName, renameImages} from './helper';
 import {getTextNodeStyle} from './text';
 import {getFillStyle, getTextStyle, getEffectStyle, getGridStyle} from './style';
+import {handleError} from './export';
 
 interface FileData {
   isFromPlugin: boolean;
@@ -86,20 +87,25 @@ const handleBoundingBox = (treeNode, node, type) => {
 };
 
 const handleCornerRadius = (treeNode, node) => {
-  if (node.cornerRadius) {
-    // four corners equal
-    if (typeof node.cornerRadius === 'number') {
-      treeNode.cornerRadius = node.cornerRadius;
-      treeNode.rectangleCornerRadii = Array.from(Array(4), () => node.cornerRadius);
-    } else {
-      // four corners not equal
-      treeNode.rectangleCornerRadii = [
-        node.topLeftRadius,
-        node.topRightRadius,
-        node.bottomRightRadius,
-        node.bottomLeftRadius
-      ];
+  try {
+    if (node.cornerRadius) {
+      // four corners equal
+      if (typeof node.cornerRadius === 'number') {
+        treeNode.cornerRadius = node.cornerRadius;
+        treeNode.rectangleCornerRadii = Array.from(Array(4), () => node.cornerRadius);
+      } else {
+        // four corners not equal
+        treeNode.rectangleCornerRadii = [
+          node.topLeftRadius,
+          node.topRightRadius,
+          node.bottomRightRadius,
+          node.bottomLeftRadius
+        ];
+      }
     }
+  } catch (err) {
+    handleError(node);
+    console.log(err);
   }
 };
 
@@ -143,6 +149,7 @@ const handleSpecialNode = (treeNode, node, type) => {
       try {
         treeNode.componentId = node.masterComponent.id;
       } catch (err) {
+        handleError(node);
         console.log(err);
       }
       break;

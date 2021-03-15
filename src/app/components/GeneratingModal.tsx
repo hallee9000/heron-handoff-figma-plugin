@@ -178,7 +178,11 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
         <div className="modal-tip type type--pos-small-bold">
           {t(buttonText === 'over' ? 'exporting finished' : "exporting and don't close")}
         </div>
-        {errorMessage && <div className="modal-error type type--pos-small-bold">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="modal-error type type--pos-small-bold">
+            {t('error occurs when parsing') + errorMessage + t('please check it')}
+          </div>
+        )}
         {errorMessage ? (
           <button className="button button--secondary" onClick={closePlugin}>
             {t('close check')}
