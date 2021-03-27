@@ -11,7 +11,7 @@ let frameNodes = [],
   componentNodes = [],
   exportNodes = [];
 
-figma.showUI(__html__, {width: 320, height: 500});
+figma.showUI(__html__, {width: 320, height: 520});
 
 // get if welcomed and settings from local storage
 initial();
