@@ -1,8 +1,8 @@
 {
-  "name": "figma-juuust-handoff-plugin",
+  "name": "figma-heron-handoff-plugin",
   "version": "1.0.0",
   "author": "Jun",
-  "repository": "git@github.com:leadream/figma-juuust-handoff-plugin.git",
+  "repository": "git@github.com:leadream/figma-heron-handoff-plugin.git",
   "description": "This plugin can help export handoff zip. It works with https://figmacn.com/handoff",
   "license": "AGPL-3.0",
   "scripts": {

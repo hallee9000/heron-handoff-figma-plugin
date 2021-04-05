@@ -33,7 +33,7 @@ const Welcome = ({isWaiting, messageData, onChecked, onWelcomed, t}: Props) => {
     !isWaiting && (
       <div className="welcome">
         <img src="https://figmacn.com/handoff/welcome.png" />
-        <h2 className="type type--pos-xlarge-bold">Juuust Handoff</h2>
+        <h2 className="type type--pos-xlarge-bold">Heron Handoff</h2>
         <div className="welcome-introduction type type--pos-small-normal">
           {t('welcome title')}{' '}
           <a href={t('help link')} target="_blank">

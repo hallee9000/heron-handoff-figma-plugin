@@ -1,4 +1,4 @@
-# Figma Juuust Handoff Plugin
+# Figma Heron Handoff Plugin
 这是一个 Figma 插件，可以帮你导出离线的设计标注文件，设计标注的界面你可以查看 https://figmacn.com/handoff 的 Demo。
 
 ## 使用
@@ -6,7 +6,7 @@
 - 找到自己安装的插件那个页面。
 - 找到 `Development`，这里有个 `New Plugin...`，点它。
 - 选择 `Link existing plugin` 并选中文件夹中的 `manifest.json`。
-- 安装成功后，在画布中右击，依次选择 `Plugin -> Development -> Figma Juuust Handoff Plugin`，就可以导出啦。
+- 安装成功后，在画布中右击，依次选择 `Plugin -> Development -> Figma Heron Handoff Plugin`，就可以导出啦。
 
 ## 开发
 * 执行 `yarn` 安装依赖。

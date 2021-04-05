@@ -25,7 +25,7 @@ const Support = ({visible, onClose, t}: Props) => {
       <h2 className="type type--pos-xlarge-bold">🎉{t('support title')}</h2>
       <div className="support-social">
         <a
-          href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.figma.com%2Fcommunity%2Fplugin%2F830051293378016221%2FJuuust-Handoff&text=Check+out+Juuust+Handoff+by+Jun+%E2%80%94+a+free+plugin+on+%40figmadesign%3A"
+          href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.figma.com%2Fcommunity%2Fplugin%2F830051293378016221%Heron-Handoff&text=Check+out+Heron+Handoff+by+Jun+%E2%80%94+a+free+plugin+on+%40figmadesign%3A"
           target="_blank"
           rel="noopener noreferrer"
         >

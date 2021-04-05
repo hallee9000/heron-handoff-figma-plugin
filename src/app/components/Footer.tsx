@@ -1,7 +1,7 @@
 import React from 'react';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
 import {changeSettingsAndNotifyBackground} from '@utils/helper';
-import {Docs, Coffee, Globe} from '@components/icons';
+import {Home, Docs, Coffee, Globe} from '@components/icons';
 
 import './footer.less';
 
@@ -22,18 +22,21 @@ const Footer = ({globalData, changeGlobalData, onSupportClick, t}) => {
 
   return (
     <div className="app-footer">
+      <a href="https://heron.design" target="_blank" title={t('docs')}>
+        <Home size={16} />
+      </a>
+      <a href={t('help link')} target="_blank" title={t('docs')}>
+        <Docs size={16} />
+      </a>
+      <span title={t('buy coffee')} onClick={onSupportClick}>
+        <Coffee size={16} />
+      </span>
       <span title="Change language">
         <select onChange={changeLanguage} value={language}>
           <option value="en">English</option>
           <option value="zh">中文</option>
         </select>
         <Globe size={16} />
-      </span>
-      <a href={t('help link')} target="_blank" title={t('docs')}>
-        <Docs size={16} />
-      </a>
-      <span title={t('buy coffee')} onClick={onSupportClick}>
-        <Coffee size={16} />
       </span>
     </div>
   );

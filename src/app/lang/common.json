@@ -2,7 +2,7 @@
   "en": {
     "welcome title": "This plugin can help you export developer handoff files with design specs.",
     "learn more": "Learn more",
-    "help link": "https://figmacn.com/handoff-landing",
+    "help link": "https://github.com/leadream/figma-handoff",
     "let's go": "Let's go",
     "next step": "Next Step",
     "docs": "Docs",
@@ -48,7 +48,7 @@
   "zh": {
     "welcome title": "这是一个可以帮助你生成设计标注文件的插件，方便交付给开发。",
     "learn more": "了解更多",
-    "help link": "https://mp.weixin.qq.com/s/H01fw3bzR8BxcuV74TWPtw",
+    "help link": "https://docs.heron.design",
     "let's go": "我们开始吧",
     "next step": "下一步",
     "docs": "文档",
