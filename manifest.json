@@ -3,5 +3,8 @@
   "id": "830051293378016221",
   "api": "1.0.0",
   "main": "dist/code.js",
-  "ui": "dist/ui.html"
+  "ui": "dist/ui.html",
+  "relaunchButtons": [
+    {"command": "open", "name": "Heron handoff", "multipleSelection": true}
+  ]
 }

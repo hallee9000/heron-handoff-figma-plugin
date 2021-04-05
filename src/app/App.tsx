@@ -93,7 +93,7 @@ class App extends React.Component<Props> {
             </Fragment>
           )}
         </div>
-        <Footer messageData={{type, message}} onSupportClick={this.toggleSupport} />
+        <Footer messageData={{type, message}} isWelcomed={isWelcomed} onSupportClick={this.toggleSupport} />
       </div>
     );
   }

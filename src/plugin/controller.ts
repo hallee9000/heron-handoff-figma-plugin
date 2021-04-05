@@ -49,7 +49,7 @@ figma.ui.onmessage = async msg => {
       message: {fileData}
     });
   } else if (msg.type === 'ui:start-exporting') {
-    // console.log(JSON.stringify(fileData))
+    console.log(JSON.stringify(fileData));
     const {includeComponents} = globalData;
     exportNodes = frameNodes.concat(exportSettingNodes, includeComponents ? componentNodes : []);
     sendMessage({
