@@ -1,4 +1,4 @@
-import {isVisibleNode, getFileName, getConventionName, renameImages} from './helper';
+import {isVisibleNode, getFileName, getConventionName, renameImages, getNameAndVariantsProperties} from './helper';
 import {getTextNodeStyle} from './text';
 import {getFillStyle, getTextStyle, getEffectStyle, getGridStyle} from './style';
 import {handleError} from './export';
@@ -17,11 +17,19 @@ interface TreeNode {
   [propName: string]: any;
 }
 
+interface Style {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+  remote: boolean;
+}
+
 interface Styles {
-  fill?: string;
-  stroke?: string;
-  effect?: string;
-  text?: string;
+  fill?: Style;
+  stroke?: Style;
+  effect?: Style;
+  text?: Style;
 }
 
 // map node type
@@ -30,15 +38,24 @@ const nodeTypeMaps = {
   PAGE: 'CANVAS'
 };
 
-const getStyles = node => {
+const getStyleInformation = (styleId, convention) => {
+  const {id, key, name, description, remote} = figma.getStyleById(styleId);
+  return {id, key, name: getConventionName(name, convention), description, remote};
+};
+
+const getStyles = (node, convention) => {
   if (!node.fillStyleId && !node.textStyleId && !node.strokeStyleId && !node.effectStyleId) {
     return false;
   }
   const styles: Styles = {};
-  node.fillStyleId && typeof node.fillStyleId !== 'symbol' && (styles.fill = node.fillStyleId);
-  node.textStyleId && typeof node.textStyleId !== 'symbol' && (styles.text = node.textStyleId);
-  node.strokeStyleId && (styles.stroke = node.strokeStyleId);
-  node.effectStyleId && (styles.effect = node.effectStyleId);
+  node.fillStyleId &&
+    typeof node.fillStyleId !== 'symbol' &&
+    (styles.fill = getStyleInformation(node.fillStyleId, convention));
+  node.textStyleId &&
+    typeof node.textStyleId !== 'symbol' &&
+    (styles.text = getStyleInformation(node.textStyleId, convention));
+  node.strokeStyleId && (styles.stroke = getStyleInformation(node.strokeStyleId, convention));
+  node.effectStyleId && (styles.effect = getStyleInformation(node.effectStyleId, convention));
   return styles;
 };
 
@@ -109,7 +126,7 @@ const handleCornerRadius = (treeNode, node) => {
   }
 };
 
-const handleStyle = (treeNode, node) => {
+const handleStyle = (treeNode, node, convention) => {
   if (node.fills !== undefined && typeof node.fills !== 'symbol') {
     treeNode.fills = node.fills;
   }
@@ -118,13 +135,13 @@ const handleStyle = (treeNode, node) => {
     treeNode.strokeWeight = treeNode.strokeWeight !== undefined ? treeNode.strokeWeight : 1;
     treeNode.strokeAlign = treeNode.strokeAlign || 'INSIDE';
   }
-  const styles = getStyles(node);
+  const styles = getStyles(node, convention);
   if (styles) {
     treeNode.styles = styles;
   }
 };
 
-const handleSpecialNode = (treeNode, node, type) => {
+const handleSpecialNode = (treeNode, node, type, convention) => {
   switch (type) {
     case 'CANVAS':
       treeNode.backgroundColor = node.backgrounds[0];
@@ -145,9 +162,25 @@ const handleSpecialNode = (treeNode, node, type) => {
         treeNode.style = textStyle;
       }
       break;
+    case 'COMPONENT':
+      try {
+        const {name, variantProperties} = getNameAndVariantsProperties(node);
+        treeNode.name = getConventionName(name, convention);
+        treeNode.variantProperties = variantProperties;
+        treeNode.key = node.key;
+        treeNode.description = node.description;
+      } catch (err) {
+        handleError(node);
+        console.log(err);
+      }
+      break;
     case 'INSTANCE':
       try {
-        treeNode.componentId = node.masterComponent.id;
+        const {mainComponent} = node;
+        const {id, key, description} = mainComponent;
+        const {name, variantProperties} = getNameAndVariantsProperties(mainComponent);
+        treeNode.variantProperties = variantProperties;
+        treeNode.mainComponent = {id, name: getConventionName(name, convention), key, description};
       } catch (err) {
         handleError(node);
         console.log(err);
@@ -177,8 +210,8 @@ export const walkDocument = (document, selectedFrameKeys, globalData) => {
       type
     };
     assignProperties(treeNode, node);
-    handleSpecialNode(treeNode, node, type);
-    handleStyle(treeNode, node);
+    handleSpecialNode(treeNode, node, type, convention);
+    handleStyle(treeNode, node, convention);
     handleCornerRadius(treeNode, node);
     handleBoundingBox(treeNode, node, type);
     handleExportSettings(treeNode, node, nodeExportSettings => {

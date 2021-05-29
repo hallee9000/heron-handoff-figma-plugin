@@ -36,6 +36,7 @@ export const downloadHTMLAndAssets = async (zip, data, onPhase) => {
 export const handleIndexHTML = async (zip, data) => {
   const {fileData, pagedFrames, settings} = data;
   const indexSourceCode = await getSourceCode(`${getBaseUrl(settings.language)}index.html`);
+  console.log(JSON.stringify(fileData));
   const indexSourceCodeWithData = (indexSourceCode as string)
     .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`)
     .replace('FILE_DATA=""', `FILE_DATA = ${JSON.stringify(fileData)}`)

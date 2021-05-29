@@ -145,3 +145,18 @@ export const isVisibleNode = node => {
     return false;
   }
 };
+
+export function getNameAndVariantsProperties(mainComponent) {
+  if (mainComponent.parent && mainComponent.parent.type === 'COMPONENT_SET') {
+    const variantProperties = mainComponent.name
+      .split(/,\s*/g)
+      .map(variantProperty => {
+        const propertyPairs = variantProperty.split('=');
+        return propertyPairs.length < 2 ? variantProperty : propertyPairs.map(p => p.trim());
+      })
+      .filter(p => p);
+    return {name: mainComponent.parent.name, variantProperties};
+  } else {
+    return {name: mainComponent.name};
+  }
+}
