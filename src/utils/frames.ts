@@ -54,3 +54,36 @@ export const getSelectedFrameKeys = currentPage =>
   currentPage.selection
     .filter(({parent, type, visible}) => parent.type === 'PAGE' && type === 'FRAME' && visible)
     .map(frame => frame.id);
+
+export function compare(a, b) {
+  const nameA = a.title.toUpperCase(),
+    nameB = b.title.toUpperCase();
+  const [numA] = a.title.match(/^[0-9]+/g) || [];
+  const [numB] = b.title.match(/^[0-9]+/g) || [];
+  if (numA && numB) {
+    return numA - numB;
+  }
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  return 0;
+}
+
+export const getSortedAllFrames = allFrames => {
+  if (allFrames.length === 0) {
+    return [];
+  }
+  const clonedAllFrames = [...allFrames];
+  const alphabetFrames = clonedAllFrames.sort(compare).map(({children, ...rest}) => ({
+    children: [...children].sort(compare),
+    ...rest
+  }));
+  const reversedAlphabetFrames = [...alphabetFrames].reverse().map(({children, ...rest}) => ({
+    children: [...children].reverse(),
+    ...rest
+  }));
+  return [clonedAllFrames, alphabetFrames, reversedAlphabetFrames];
+};

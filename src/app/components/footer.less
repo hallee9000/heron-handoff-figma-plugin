@@ -1,8 +1,14 @@
 .app-footer{
   display: flex;
+  align-items: center;
   padding: 3px 6px;
-  justify-content: flex-end;
+  .stretched-box {
+    flex: 1;
+  }
   span, a{
+    display: flex;
+    align-items: center;
+    gap: 4px;
     padding: 7px;
     border-radius: 6px;
     color: #333;
@@ -21,8 +27,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       opacity: 0;
       cursor: pointer;
     }

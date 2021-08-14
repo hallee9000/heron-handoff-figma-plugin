@@ -80,3 +80,5 @@ export const CONVENTION_IMAGES_EXAMPLES = [
   ' (iconHome)',
   ' (IconHome)'
 ];
+
+export const SORT_ORDERS = ['original order', 'alphabet order', 'alphabet reversed order'];

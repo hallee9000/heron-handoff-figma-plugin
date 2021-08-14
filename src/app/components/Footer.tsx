@@ -1,7 +1,7 @@
 import React from 'react';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
 import {changeSettingsAndNotifyBackground} from '@utils/helper';
-import {Home, Docs, Coffee, Globe} from '@components/icons';
+import {Home, Docs, MessageCircle, Coffee, Globe} from '@components/icons';
 
 import './footer.less';
 
@@ -23,11 +23,20 @@ const Footer = ({globalData, changeGlobalData, isWelcomed, onSupportClick, t}) =
 
   return (
     <div className="app-footer">
+      <a className="type type--pos-small-normal" href={t('help link')} target="_blank" title={t('docs')}>
+        <Docs size={16} /> {t('visit docs')}
+      </a>
+      <a
+        className="type type--pos-small-normal"
+        href="https://www.figma.com/file/T2NqB87WLWTTw2XMFkGkOf/Heron-handoff?node-id=13421%3A7849"
+        target="_blank"
+        title={t('feedback')}
+      >
+        <MessageCircle size={16} /> {t('feedback')}
+      </a>
+      <div className="stretched-box" />
       <a href="https://heron.design" target="_blank" title={t('docs')}>
         <Home size={16} />
-      </a>
-      <a href={t('help link')} target="_blank" title={t('docs')}>
-        <Docs size={16} />
       </a>
       {isWelcomed && (
         <span title={t('buy coffee')} onClick={onSupportClick}>

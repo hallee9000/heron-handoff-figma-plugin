@@ -97,6 +97,7 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
     delete settings.overrideRepeatedImages;
     // add webp exporting so we can see them in slices list
     const exportSettings = handleWebPExportSettings(fileData.exportSettings, globalData.exportWebP);
+
     // zip assets of website
     await downloadHTMLAndAssets(
       zip,

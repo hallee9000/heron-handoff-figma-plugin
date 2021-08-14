@@ -43,7 +43,7 @@ const Support = ({visible, onClose, t}: Props) => {
         </a>
       </div>
       <div className="type type--pos-medium-normal">{t('or buy coffee')}</div>
-      <img src="https://figmacn.com/handoff/qrcode.jpg" />
+      {visible && <img src="https://figmacn.com/handoff/qrcode.jpg" alt="Payment QRCode" />}
       <a
         href="https://paypal.me/leadream"
         target="_blank"

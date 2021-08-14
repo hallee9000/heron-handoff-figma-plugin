@@ -5,6 +5,7 @@ export interface IGlobalContext {
   globalData: {
     view: string;
     language: string;
+    sortOrder: number;
     platform: number;
     resolution: number;
     unit: number;
@@ -22,6 +23,7 @@ const defaultGlobalContext: IGlobalContext = {
   globalData: {
     view: 'selector',
     language: 'zh',
+    sortOrder: 0,
     platform: 0,
     resolution: 0,
     unit: 2,
