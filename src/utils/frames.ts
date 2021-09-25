@@ -1,3 +1,24 @@
+// 递归获取所有的 key
+export const getKeys = options => {
+  const allKeys = [];
+  const folderKeys = [];
+  function walk(items) {
+    items.map(({key, children}) => {
+      allKeys.push(key);
+      if (children) {
+        folderKeys.push(key);
+        walk(children);
+      }
+    });
+  }
+  walk(options);
+  return {allKeys, folderKeys};
+};
+
+export const getSelectedKeys = pagesAndFrames => {
+  return pagesAndFrames.map(({children}) => children.map(({id}) => id)).reduce((a, b) => a.concat(b));
+};
+
 export const getFlattenedFrameKeys = (pagedFrames, checkedKeys?) => {
   const frameKeys = [];
   pagedFrames.map(({children}) => {
@@ -86,4 +107,61 @@ export const getSortedAllFrames = allFrames => {
     ...rest
   }));
   return [clonedAllFrames, alphabetFrames, reversedAlphabetFrames];
+};
+
+export const getNestedPageFrames = allFrames => {
+  const getTitleParts = fullTitle =>
+    fullTitle
+      .split('/')
+      .map(e => e.trim())
+      .filter(part => !!part);
+
+  function walk(frames, pageIndex) {
+    const nestedFrames = [];
+    // 逐个处理 frame
+    frames.map((frame, frameIndex) => {
+      let tempFrames = nestedFrames;
+      // 名字由斜线分开后的多个块
+      const titleParts = getTitleParts(frame.title);
+      // 逐个处理名字的每一块
+      titleParts.forEach((_n, index) => {
+        const currentTitle = titleParts.slice(0, index + 1).join('/');
+        let matchedFrame = tempFrames.find(t => t.title === currentTitle);
+        // 最后一个
+        if (index === titleParts.length - 1) {
+          // 如果出现同名的，但是没有 key(id)，就把这个作为它的母页面
+          if (matchedFrame && matchedFrame.key.startsWith('temp-')) {
+            matchedFrame.key = frame.key;
+          } else {
+            tempFrames.push({
+              key: frame.key,
+              title: currentTitle
+            });
+          }
+        } else {
+          // 这一层没找到
+          if (!matchedFrame) {
+            const s = {
+              key: `temp-${pageIndex}-${frameIndex}-${index}`,
+              title: currentTitle,
+              children: []
+            };
+            tempFrames.push(s);
+            matchedFrame = s;
+          }
+          // 循环下一次进入下一层
+          if (!matchedFrame.children) {
+            matchedFrame.children = [];
+          }
+          tempFrames = matchedFrame.children;
+        }
+      });
+    });
+    return nestedFrames;
+  }
+
+  // page 不需要分了，直接循环拆分内部的 frame
+  return allFrames.map((page, pageIndex) => {
+    return {...page, children: walk(page.children, pageIndex)};
+  });
 };

@@ -1,9 +1,9 @@
-import {getAllPagedFrames, getCurrentPageFrameKeys, getSelectedFrameKeys} from '@utils/frames';
+import {getAllPagedFrames} from '@utils/frames';
 import {sendMessage} from '@utils/helper';
 import {exportFrame, exportComponent, exportSlice} from '@utils/export';
 import {walkDocument} from '@utils/walk';
-import initial from '@utils/initial';
 import {getUserId} from '@utils/identifyUser';
+import {getSelectedArtboards, initial, listenToChange} from './background';
 
 let fileData, globalData;
 let frameNodes = [],
@@ -18,22 +18,29 @@ initial();
 // send mixpanel user id
 getUserId();
 
+// listen selection or current page change,
+// then tell UI to change checked frames
+listenToChange();
+
 figma.ui.onmessage = async msg => {
   if (msg.type === 'ui:set-welcomed') {
     await figma.clientStorage.setAsync('welcomed', true);
   } else if (msg.type === 'ui:set-settings') {
     await figma.clientStorage.setAsync('heronHandoff.settings', msg.settings);
   } else if (msg.type === 'ui:get-frames') {
-    const hasSelections = !!figma.currentPage.selection.length;
     sendMessage({
       type: 'bg:frames-got',
       message: {
+        currentPageId: figma.currentPage.id,
         allFrames: getAllPagedFrames(figma.root),
-        currentFrames: hasSelections
-          ? getSelectedFrameKeys(figma.currentPage)
-          : getCurrentPageFrameKeys(figma.currentPage),
-        currentPageKey: figma.currentPage.id
+        selectedFrames: getSelectedArtboards()
       }
+    });
+  } else if (msg.type === 'ui:checked-keys-changed') {
+    const selectedKeys = msg.message;
+    // change selection to checked items
+    figma.root.children.map(page => {
+      page.selection = page.children.filter(({id}) => selectedKeys.includes(id));
     });
   } else if (msg.type === 'ui:start-generating') {
     const {selectedFrameKeys, globalData: gd} = msg;

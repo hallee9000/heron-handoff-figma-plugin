@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import cn from 'classnames';
 import Tree from 'rc-tree';
 import Header from '@components/Header';
-import {getFlattenedFrameKeys, getPageKeys, getSortedAllFrames} from '@utils/frames';
+import Modal from '@app/components/Modal';
+import FrameSettings from '@app/components/FrameSettings';
+import TreeNodeIcon from '@app/components/TreeNodeIcon';
+import {Settings} from '@components/icons';
+import {getKeys, getSelectedKeys, getNestedPageFrames, getSortedAllFrames} from '@utils/frames';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
-import {changeSettingsAndNotifyBackground} from '@utils/helper';
-import {SORT_ORDERS} from '@app/constants';
 
 import './style.less';
+import {sendMessageToBackground} from '@utils/helper';
 
 export interface Props {
   globalData: any;
@@ -18,55 +21,67 @@ export interface Props {
 }
 
 const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props) => {
+  const [settingsVisible, toggleSettings] = useState(false);
   const [allFrames, setAllFrames] = useState([]);
-  const [sortedFramesData, setSortedFramesData] = useState([]);
-  const [currentFrames, setCurrentFrames] = useState([]);
-  const [currentPageKey, setCurrentPageKey] = useState();
-  const [keys, setKeys] = useState({frame: [], page: []});
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [isAllSelected, setIsAllSelected] = useState(false);
+
+  const {sortOrder, useNestedPages} = globalData;
+  const sortedFramesData = useMemo(() => getSortedAllFrames(allFrames), [allFrames]);
+  const frameOptions = useMemo(() => sortedFramesData[sortOrder] || [], [sortedFramesData, sortOrder]);
+  const nestedFrameOptions = useMemo(() => (!!frameOptions.length ? getNestedPageFrames(frameOptions) : []), [
+    frameOptions
+  ]);
+  const options = useNestedPages ? nestedFrameOptions : frameOptions;
+  const keysData = useMemo(() => getKeys(options), [options]);
 
   // effects
   useEffect(() => {
     const {type, message} = messageData;
     if (type === 'bg:frames-got') {
-      const {allFrames, currentFrames, currentPageKey} = message;
-      setCurrentFrames(currentFrames);
-      setCurrentPageKey(currentPageKey);
-
-      const sortedFramesData = getSortedAllFrames(allFrames);
-      setSortedFramesData(sortedFramesData);
-      setAllFrames(sortedFramesData[globalData.sortOrder]);
+      const {allFrames, currentPageId, selectedFrames} = message;
+      setAllFrames(allFrames);
+      setCheckedKeys(getSelectedKeys(selectedFrames));
+      setExpandedKeys([currentPageId]);
     }
-  }, [messageData.type]);
+    // 选择改变时
+    if (type === 'bg:selection-change') {
+      const {selectedFrames} = message;
+      setCheckedKeys(getSelectedKeys(selectedFrames));
+    }
+    // 切换页面时
+    if (type === 'bg:current-page-change') {
+      const {currentPageId} = message;
+      if (!expandedKeys.includes(currentPageId)) {
+        setExpandedKeys([currentPageId, ...expandedKeys]);
+      }
+    }
+  }, [messageData]);
 
+  // 每次勾选变化时，需要通知 Figma 更改选中项
   useEffect(() => {
-    const keys = {frame: getFlattenedFrameKeys(allFrames), page: getPageKeys(allFrames)};
-    setKeys(keys);
-  }, [allFrames]);
+    sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
+  }, [checkedKeys]);
 
-  useEffect(() => {
-    setCheckedKeys(currentFrames);
-    setExpandedKeys([currentPageKey]);
-  }, [currentFrames, currentPageKey]);
-
-  // methods
+  // 展开时
   const handleExpand = expandedKeys => {
     setExpandedKeys(expandedKeys);
   };
 
+  // 勾选时
   const handleTreeOptionCheck = checkedKeys => {
     setCheckedKeys(checkedKeys);
-    setIsAllSelected(checkedKeys.length === keys.frame.length + keys.page.length);
-  };
-
-  const handleSelectAll = isChecked => {
-    setCheckedKeys(isChecked ? keys.frame : []);
+    // 选中了全部
+    setIsAllSelected(checkedKeys.length === keysData.allKeys.length);
   };
 
   const toggleExpandAll = shouldExpand => {
-    setExpandedKeys(shouldExpand ? keys.page : []);
+    setExpandedKeys(shouldExpand ? keysData.folderKeys : []);
+  };
+
+  const handleSelectAll = isChecked => {
+    setCheckedKeys(isChecked ? keysData.allKeys : []);
   };
 
   const showSettings = () => {
@@ -74,19 +89,11 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
     onNext(allFrames, checkedKeys);
   };
 
-  // 切换排序方式
-  const handleSortOrderChange = e => {
-    const sortIndex = +e.target.value;
-    changeGlobalData('sortOrder', sortIndex);
-    changeSettingsAndNotifyBackground(globalData, {sortOrder: sortIndex});
-    setAllFrames(sortedFramesData[sortIndex]);
-  };
-
   return (
     <div className={cn('selector', {visible: globalData.view === 'selector'})}>
       <Header
         isAllSelected={isAllSelected}
-        pageKeys={keys.page}
+        folderKeys={keysData.folderKeys}
         expandedKeys={expandedKeys}
         onToggleExpand={toggleExpandAll}
         onSelectAllChange={handleSelectAll}
@@ -95,28 +102,25 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
         <Tree
           checkable
           selectable={false}
-          checkedKeys={checkedKeys}
+          treeData={options}
           expandedKeys={expandedKeys}
           onExpand={handleExpand}
-          showIcon={false}
-          treeData={allFrames}
+          checkedKeys={checkedKeys}
           onCheck={handleTreeOptionCheck}
+          showIcon={useNestedPages}
+          icon={TreeNodeIcon}
         />
       </div>
+      <Modal isOpen={settingsVisible} onClose={() => toggleSettings(false)}>
+        <FrameSettings visible={settingsVisible} />
+      </Modal>
       <div className="selector-actions">
         {!!allFrames.length && !checkedKeys.length && (
           <div className="actions-error type type--pos-small-bold">{t('at least')}</div>
         )}
         <div className="buttons">
-          <span className="type type--pos-small-bold">
-            {t('frame order')}
-            <select name="sortOrder" className="select" value={globalData.sortOrder} onChange={handleSortOrderChange}>
-              {SORT_ORDERS.map((order, index) => (
-                <option value={index} key={order}>
-                  {t(order)}
-                </option>
-              ))}
-            </select>
+          <span className="type type--pos-small-bold" onClick={() => toggleSettings(true)}>
+            <Settings /> 排序等设置
           </span>
           <button className="button button--primary" onClick={showSettings}>
             {t('next step')}

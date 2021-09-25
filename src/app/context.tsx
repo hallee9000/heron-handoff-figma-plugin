@@ -6,6 +6,7 @@ export interface IGlobalContext {
     view: string;
     language: string;
     sortOrder: number;
+    useNestedPages: boolean;
     platform: number;
     resolution: number;
     unit: number;
@@ -24,6 +25,7 @@ const defaultGlobalContext: IGlobalContext = {
     view: 'selector',
     language: 'zh',
     sortOrder: 0,
+    useNestedPages: false,
     platform: 0,
     resolution: 0,
     unit: 2,

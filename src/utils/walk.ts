@@ -66,6 +66,7 @@ const assignProperties = (treeNode, node) => {
     'blendMode',
     'size',
     'clipsContent',
+    'absoluteTransform',
     'relativeTransform',
     'effects',
     'isMask',

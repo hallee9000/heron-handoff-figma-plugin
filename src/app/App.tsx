@@ -44,6 +44,7 @@ class App extends React.Component<Props> {
     this.setState({supportVisible: !supportVisible});
   };
   handleFramesSelected = (allFrames, checkedKeys) => {
+    console.log(allFrames, checkedKeys);
     this.setState({framesData: {allFrames, checkedKeys}});
   };
   async componentDidMount() {

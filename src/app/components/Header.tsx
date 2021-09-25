@@ -6,7 +6,7 @@ import './header.less';
 
 export interface Props {
   isAllSelected: boolean;
-  pageKeys: any[];
+  folderKeys: any[];
   expandedKeys: any[];
   onToggleExpand: (shouldExpand) => void;
   onSelectAllChange: (isChecked) => void;
@@ -19,10 +19,11 @@ class Header extends React.Component<Props> {
   };
   handleSelectAllChange = e => {
     const {onSelectAllChange} = this.props;
+    const isAllSelected = e.target.checked;
     this.setState({
-      isAllSelected: e.target.checked
+      isAllSelected
     });
-    onSelectAllChange(e.target.checked);
+    onSelectAllChange(isAllSelected);
   };
   componentDidUpdate(prevProps) {
     if (prevProps.isAllSelected !== this.props.isAllSelected) {
@@ -32,7 +33,7 @@ class Header extends React.Component<Props> {
     }
   }
   render() {
-    const {pageKeys, expandedKeys, onToggleExpand, t} = this.props;
+    const {folderKeys, expandedKeys, onToggleExpand, t} = this.props;
     const {isAllSelected} = this.state;
     return (
       <div className="selector-header">
@@ -51,7 +52,7 @@ class Header extends React.Component<Props> {
         <div className="stretched-box" />
         <div
           className={cn('header-action header-expand type type--pos-small-normal', {
-            'header-action-disabled': expandedKeys.length === pageKeys.length
+            'header-action-disabled': expandedKeys.length === folderKeys.length
           })}
           onClick={() => onToggleExpand(true)}
         >

@@ -3,6 +3,10 @@ export const sendMessage = message => {
   figma.ui.postMessage(message);
 };
 
+export const sendMessageToBackground = (type, message) => {
+  parent.postMessage({pluginMessage: {type, message}}, '*');
+};
+
 export const changeSettingsAndNotifyBackground = (globalData, changes) => {
   const slimGlobalData = {...globalData};
   delete slimGlobalData.view;

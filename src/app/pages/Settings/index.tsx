@@ -17,6 +17,7 @@ const Settings = ({messageData, framesData, onFinished, globalData, changeGlobal
     mixpanel.track('Juuust Handoff', {Action: 'Start exporting'});
     setIsGenerating(true);
   };
+
   return (
     <>
       <div className={cn('settings', {'settings-visible': globalData.view === 'settings'})}>

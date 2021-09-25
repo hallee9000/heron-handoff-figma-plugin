@@ -484,8 +484,8 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  height: 32px;
-  cursor: default;
+  height: 24px;
+  cursor: pointer;
 }
 
 .checkbox__box {
@@ -514,7 +514,6 @@
   display: -ms-flexbox;
   display: flex;
   width: 100%;
-  padding: 7px 0;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -526,7 +525,8 @@
   display: block;
   width: 10px;
   height: 10px;
-  margin: 2px 10px 0 10px;
+  margin: 2px;
+  margin-right: 8px;
   content: '';
   border: 1px solid rgba(0, 0, 0, 0.8);
   border-radius: 2px;
