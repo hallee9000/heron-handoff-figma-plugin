@@ -16,7 +16,23 @@ export const getKeys = options => {
 };
 
 export const getSelectedKeys = pagesAndFrames => {
-  return pagesAndFrames.map(({children}) => children.map(({id}) => id)).reduce((a, b) => a.concat(b));
+  return !!pagesAndFrames.length
+    ? pagesAndFrames.map(({children}) => children.map(({id}) => id)).reduce((a, b) => a.concat(b))
+    : [];
+};
+
+export const filterOptions = function(options, checkedKeys) {
+  function walk(frames) {
+    return frames
+      .filter(item => (item.key.startsWith('temp-') ? true : checkedKeys.includes(item.key)))
+      .map(item => {
+        if (item.children) {
+          item.children = walk(item.children);
+        }
+        return item;
+      });
+  }
+  return options.map(({children, ...rest}) => ({children: walk(children), ...rest}));
 };
 
 export const getFlattenedFrameKeys = (pagedFrames, checkedKeys?) => {
@@ -126,19 +142,8 @@ export const getNestedPageFrames = allFrames => {
       // 逐个处理名字的每一块
       titleParts.forEach((_n, index) => {
         const currentTitle = titleParts.slice(0, index + 1).join('/');
-        let matchedFrame = tempFrames.find(t => t.title === currentTitle);
-        // 最后一个
-        if (index === titleParts.length - 1) {
-          // 如果出现同名的，但是没有 key(id)，就把这个作为它的母页面
-          if (matchedFrame && matchedFrame.key.startsWith('temp-')) {
-            matchedFrame.key = frame.key;
-          } else {
-            tempFrames.push({
-              key: frame.key,
-              title: currentTitle
-            });
-          }
-        } else {
+        let matchedFrame = tempFrames.find(t => t.key.startsWith('temp-') && t.title === currentTitle);
+        if (index < titleParts.length - 1) {
           // 这一层没找到
           if (!matchedFrame) {
             const s = {
@@ -154,6 +159,13 @@ export const getNestedPageFrames = allFrames => {
             matchedFrame.children = [];
           }
           tempFrames = matchedFrame.children;
+        } else {
+          // 最后一个
+          // 如果出现同名的，但是没有 key(id)，就把这个作为它的母页面
+          tempFrames.push({
+            key: frame.key,
+            title: currentTitle
+          });
         }
       });
     });
@@ -162,6 +174,6 @@ export const getNestedPageFrames = allFrames => {
 
   // page 不需要分了，直接循环拆分内部的 frame
   return allFrames.map((page, pageIndex) => {
-    return {...page, children: walk(page.children, pageIndex)};
+    return {...page, isPage: true, children: walk(page.children, pageIndex)};
   });
 };

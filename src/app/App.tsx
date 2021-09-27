@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
 import cn from 'classnames';
 import {withGlobalContextProvider} from './context';
-import mixpanel from '@utils/mixpanel';
 import {Loader} from '@components/icons';
 import Footer from '@components/Footer';
 import Welcome from '@pages/Welcome';
 import Selector from '@pages/Selector';
 import Settings from '@pages/Settings';
 import Support from '@pages/Support';
+import {filterOptions} from '@utils/frames';
 
 import './assets/ds.css';
 import './assets/base.less';
@@ -43,18 +43,14 @@ class App extends React.Component<Props> {
     const {supportVisible} = this.state;
     this.setState({supportVisible: !supportVisible});
   };
-  handleFramesSelected = (allFrames, checkedKeys) => {
-    console.log(allFrames, checkedKeys);
-    this.setState({framesData: {allFrames, checkedKeys}});
+  handleFramesSelected = (pagedFrames, nestedFrames, checkedKeys) => {
+    console.log(filterOptions(pagedFrames, checkedKeys), filterOptions(nestedFrames, checkedKeys), checkedKeys);
+    this.setState({framesData: {pagedFrames, nestedFrames, checkedKeys}});
   };
   async componentDidMount() {
     window.onmessage = async event => {
       const {type, message} = event.data.pluginMessage || {};
       this.changeMessage(type, message);
-      if (type === 'bg:mixpanel-user') {
-        const {userId} = message;
-        mixpanel.identify(userId);
-      }
       if (type === 'bg:settings-got') {
         const {settings} = message;
         // if no local settings, store default values

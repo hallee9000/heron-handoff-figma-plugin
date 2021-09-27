@@ -16,7 +16,7 @@ export interface Props {
   globalData: any;
   changeGlobalData: (property, value) => void;
   messageData: any;
-  onNext: (allFrames, checkedKeys) => void;
+  onNext: (frameOptions, nestedFrameOptions, checkedKeys) => void;
   t: (key) => string;
 }
 
@@ -59,11 +59,6 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
     }
   }, [messageData]);
 
-  // 每次勾选变化时，需要通知 Figma 更改选中项
-  useEffect(() => {
-    sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
-  }, [checkedKeys]);
-
   // 展开时
   const handleExpand = expandedKeys => {
     setExpandedKeys(expandedKeys);
@@ -74,6 +69,8 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
     setCheckedKeys(checkedKeys);
     // 选中了全部
     setIsAllSelected(checkedKeys.length === keysData.allKeys.length);
+    // 每次勾选变化时，需要通知 Figma 更改选中项
+    sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
   };
 
   const toggleExpandAll = shouldExpand => {
@@ -82,11 +79,13 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
 
   const handleSelectAll = isChecked => {
     setCheckedKeys(isChecked ? keysData.allKeys : []);
+    // 每次勾选变化时，需要通知 Figma 更改选中项
+    sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
   };
 
   const showSettings = () => {
     changeGlobalData('view', 'settings');
-    onNext(allFrames, checkedKeys);
+    onNext(frameOptions, nestedFrameOptions, checkedKeys);
   };
 
   return (

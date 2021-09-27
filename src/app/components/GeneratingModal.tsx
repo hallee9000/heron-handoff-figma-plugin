@@ -3,17 +3,14 @@ import JSZip from 'jszip';
 import {saveAs} from 'file-saver';
 import {trimFilePath, getFileMeta, handleWebPExportSettings} from '@utils/helper';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
-import {getFlattenedFrameKeys, getSelectedPagedFrames} from '@utils/frames';
 import {downloadHTMLAndAssets} from '@utils/download';
-import mixpanel from '@utils/mixpanel';
 
 import './generating-modal.less';
 
 const zip = new JSZip();
 
 const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) => {
-  const pagedFrames = getSelectedPagedFrames(framesData.allFrames, framesData.checkedKeys);
-  const selectedFrameKeys = getFlattenedFrameKeys(framesData.allFrames, framesData.checkedKeys);
+  const {pagedFrames, nestedFrames, checkedKeys} = framesData;
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState({});
   const [currentFileName, setCurrentFileName] = useState('');
@@ -28,8 +25,7 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
       {
         pluginMessage: {
           type: 'ui:start-generating',
-          pagedFrames,
-          selectedFrameKeys,
+          selectedFrameKeys: checkedKeys,
           globalData
         }
       },
@@ -63,7 +59,7 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
   // set count data once fileData got
   const getCountData = fileData => {
     const count = {
-      frame: selectedFrameKeys.length,
+      frame: checkedKeys.length,
       component: fileData.components.length,
       exportSetting: fileData.exportSettings ? fileData.exportSettings.length : 0
     };
@@ -101,7 +97,7 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
     // zip assets of website
     await downloadHTMLAndAssets(
       zip,
-      {fileData: {...fileData, exportSettings}, pagedFrames, settings},
+      {fileData: {...fileData, exportSettings}, pagedFrames, nestedFrames, settings},
       (phase, percentage) => {
         setPercentageText(percentage, phase);
       }
@@ -164,7 +160,6 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
       zip.generateAsync({type: 'blob'}).then(content => {
         setPercentageText(0, 'over');
         saveAs(content, `${trimFilePath(documentName)}.zip`);
-        mixpanel.track('Juuust Handoff', {Action: 'Exporting completed'});
       });
     }
   };

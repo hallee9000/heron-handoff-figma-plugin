@@ -2,7 +2,6 @@ import {getAllPagedFrames} from '@utils/frames';
 import {sendMessage} from '@utils/helper';
 import {exportFrame, exportComponent, exportSlice} from '@utils/export';
 import {walkDocument} from '@utils/walk';
-import {getUserId} from '@utils/identifyUser';
 import {getSelectedArtboards, initial, listenToChange} from './background';
 
 let fileData, globalData;
@@ -15,8 +14,6 @@ figma.showUI(__html__, {width: 320, height: 520});
 
 // get if welcomed and settings from local storage
 initial();
-// send mixpanel user id
-getUserId();
 
 // listen selection or current page change,
 // then tell UI to change checked frames

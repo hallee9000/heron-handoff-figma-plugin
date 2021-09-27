@@ -5,7 +5,6 @@ import Mark from './Mark';
 import Library from './Library';
 import Exportings from './Exportings';
 import GeneratingModal from '@components/GeneratingModal';
-import mixpanel from '@utils/mixpanel';
 import './style.less';
 
 const Settings = ({messageData, framesData, onFinished, globalData, changeGlobalData, t}) => {
@@ -14,7 +13,6 @@ const Settings = ({messageData, framesData, onFinished, globalData, changeGlobal
     changeGlobalData('view', 'selector');
   };
   const showGeneratingModal = () => {
-    mixpanel.track('Juuust Handoff', {Action: 'Start exporting'});
     setIsGenerating(true);
   };
 

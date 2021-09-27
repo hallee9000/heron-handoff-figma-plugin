@@ -34,13 +34,14 @@ export const downloadHTMLAndAssets = async (zip, data, onPhase) => {
 
 // generate index.html
 export const handleIndexHTML = async (zip, data) => {
-  const {fileData, pagedFrames, settings} = data;
+  const {fileData, pagedFrames, nestedFrames, settings} = data;
   const indexSourceCode = await getSourceCode(`${getBaseUrl(settings.language)}index.html`);
   console.log(JSON.stringify(fileData));
   const indexSourceCodeWithData = (indexSourceCode as string)
     .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`)
-    .replace('FILE_DATA=""', `FILE_DATA = ${JSON.stringify(fileData)}`)
-    .replace('SETTINGS=""', `SETTINGS = ${JSON.stringify(settings)}`);
+    .replace('NESTED_FRAMES=""', `NESTED_FRAMES = ${JSON.stringify(nestedFrames)}`)
+    .replace('SETTINGS=""', `SETTINGS = ${JSON.stringify(settings)}`)
+    .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`);
   zip.file('index.html', indexSourceCodeWithData);
   return indexSourceCode;
 };
