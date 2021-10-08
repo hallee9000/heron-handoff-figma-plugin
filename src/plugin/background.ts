@@ -28,7 +28,15 @@ export function getSelectedArtboards() {
 }
 
 export function listenToChange() {
+  function getOrder() {
+    const shouldResponse = figma.root.getPluginData('should-response');
+    figma.root.setPluginData('should-response', 'yes');
+    return shouldResponse;
+  }
   figma.on('currentpagechange', function() {
+    if (getOrder() === 'no') {
+      return;
+    }
     sendMessage({
       type: 'bg:current-page-change',
       message: {
@@ -37,6 +45,9 @@ export function listenToChange() {
     });
   });
   figma.on('selectionchange', function() {
+    if (getOrder() === 'no') {
+      return;
+    }
     sendMessage({
       type: 'bg:selection-change',
       message: {

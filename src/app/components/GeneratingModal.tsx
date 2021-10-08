@@ -102,7 +102,8 @@ const GeneratingModal = ({globalData, framesData, messageData, onFinished, t}) =
         setPercentageText(percentage, phase);
       }
     );
-    if (getTotal(countData, settings.includeComponents)) {
+    const total = getTotal(countData, settings.includeComponents);
+    if (total) {
       // start to export
       sendMessage({type: 'ui:start-exporting'});
     }

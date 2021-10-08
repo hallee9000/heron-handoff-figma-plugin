@@ -35,6 +35,7 @@ figma.ui.onmessage = async msg => {
     });
   } else if (msg.type === 'ui:checked-keys-changed') {
     const selectedKeys = msg.message;
+    figma.root.setPluginData('should-response', 'no');
     // change selection to checked items
     figma.root.children.map(page => {
       page.selection = page.children.filter(({id}) => selectedKeys.includes(id));

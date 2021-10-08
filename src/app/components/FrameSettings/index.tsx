@@ -5,7 +5,6 @@ import Checkbox from '@app/components/Checkbox';
 import {SORT_ORDERS} from '@app/constants';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
 import {changeSettingsAndNotifyBackground} from '@utils/helper';
-import './style.less';
 
 const FrameSettings = function({visible, t, changeGlobalData, globalData}) {
   // 切换排序方式
@@ -49,15 +48,12 @@ const FrameSettings = function({visible, t, changeGlobalData, globalData}) {
         <label className="label" />
         <a
           className="helper"
-          href="https://docs.heron.design/designer/#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E9%80%89%E4%BA%86-2x-%E6%A0%87%E6%B3%A8%E5%8F%98%E6%88%90%E4%B8%80%E5%8D%8A%E4%BA%86"
+          href="https://docs.heron.design/designer/#%E5%A4%9A%E5%B1%82%E7%BA%A7%E9%A1%B5%E9%9D%A2%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"
           target="_blank"
         >
           {t('see explanation')}
           <Docs size={12} />
         </a>
-      </div>
-      <div className="actions">
-        <button className="button button--primary">{t('ok')}</button>
       </div>
     </div>
   );

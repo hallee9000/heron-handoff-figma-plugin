@@ -21,18 +21,50 @@ export const getSelectedKeys = pagesAndFrames => {
     : [];
 };
 
-export const filterOptions = function(options, checkedKeys) {
-  function walk(frames) {
-    return frames
-      .filter(item => (item.key.startsWith('temp-') ? true : checkedKeys.includes(item.key)))
-      .map(item => {
-        if (item.children) {
-          item.children = walk(item.children);
-        }
-        return item;
-      });
+// 根据选中的 ID 过滤
+export const optionsToContents = function(options, checkedKeys, isNested?) {
+  function getName(title) {
+    const nameParts = getTitleParts(title);
+    return isNested ? nameParts[nameParts.length - 1] : title;
   }
-  return options.map(({children, ...rest}) => ({children: walk(children), ...rest}));
+
+  function walk(frames) {
+    const filteredFrames = [];
+    frames.map(item => {
+      const newItem: any = {id: item.key, name: getName(item.title)};
+      const isSelected = checkedKeys.includes(newItem.id);
+      const filteredChildren = item.children ? walk(item.children) : [];
+      const hasSelectedChildren = !!filteredChildren.length;
+      // 如果当前项的 ID 被选中，或者孩子里面有被选中的，就返回
+      if (isSelected || hasSelectedChildren) {
+        if (hasSelectedChildren) {
+          newItem.children = filteredChildren;
+        }
+        if (isNested) {
+          const repeatedItem = filteredFrames.find(({name}) => name === newItem.name);
+          // 有重复的需要合并
+          if (repeatedItem) {
+            if (!repeatedItem.id.startsWith('temp-') && newItem.id.startsWith('temp-')) {
+              // 新的是文件夹，但列表中已有同名的
+              repeatedItem.children = filteredChildren;
+            } else if (repeatedItem.id.startsWith('temp-') && !newItem.id.startsWith('temp-')) {
+              // 列表中已有同名文件夹
+              repeatedItem.id = newItem.id;
+            } else {
+              filteredFrames.push(newItem);
+            }
+          } else {
+            filteredFrames.push(newItem);
+          }
+        } else {
+          filteredFrames.push(newItem);
+        }
+      }
+    });
+    return filteredFrames;
+  }
+
+  return options.map(({children, key, title}) => ({children: walk(children), id: key, name: title}));
 };
 
 export const getFlattenedFrameKeys = (pagedFrames, checkedKeys?) => {
@@ -125,13 +157,13 @@ export const getSortedAllFrames = allFrames => {
   return [clonedAllFrames, alphabetFrames, reversedAlphabetFrames];
 };
 
-export const getNestedPageFrames = allFrames => {
-  const getTitleParts = fullTitle =>
-    fullTitle
-      .split('/')
-      .map(e => e.trim())
-      .filter(part => !!part);
+export const getTitleParts = fullTitle =>
+  fullTitle
+    .split('/')
+    .map(e => e.trim())
+    .filter(part => !!part);
 
+export const getNestedPageFrames = allFrames => {
   function walk(frames, pageIndex) {
     const nestedFrames = [];
     // 逐个处理 frame

@@ -2,7 +2,8 @@ import {asyncForEach, getSourceCode, getBufferData} from './helper';
 
 const getBaseUrl = language =>
   language === 'zh'
-    ? 'https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com/'
+    ? // ? 'http://localhost:5000/'
+      'https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com/'
     : 'https://leadream.github.io/figma-handoff/';
 
 export const getScriptSrcs = indexSourceCode => {
@@ -38,10 +39,12 @@ export const handleIndexHTML = async (zip, data) => {
   const indexSourceCode = await getSourceCode(`${getBaseUrl(settings.language)}index.html`);
   console.log(JSON.stringify(fileData));
   const indexSourceCodeWithData = (indexSourceCode as string)
-    .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`)
-    .replace('NESTED_FRAMES=""', `NESTED_FRAMES = ${JSON.stringify(nestedFrames)}`)
+    .replace(
+      'PAGED_FRAMES=""',
+      `PAGED_FRAMES = ${JSON.stringify(settings.useNestedPages ? nestedFrames : pagedFrames)}`
+    )
     .replace('SETTINGS=""', `SETTINGS = ${JSON.stringify(settings)}`)
-    .replace('PAGED_FRAMES=""', `PAGED_FRAMES = ${JSON.stringify(pagedFrames)}`);
+    .replace('FILE_DATA=""', `FILE_DATA = ${JSON.stringify(fileData)}`);
   zip.file('index.html', indexSourceCodeWithData);
   return indexSourceCode;
 };

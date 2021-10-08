@@ -7,7 +7,7 @@ import Welcome from '@pages/Welcome';
 import Selector from '@pages/Selector';
 import Settings from '@pages/Settings';
 import Support from '@pages/Support';
-import {filterOptions} from '@utils/frames';
+import {getSelectedPagedFrames, optionsToContents} from '@utils/frames';
 
 import './assets/ds.css';
 import './assets/base.less';
@@ -43,9 +43,18 @@ class App extends React.Component<Props> {
     const {supportVisible} = this.state;
     this.setState({supportVisible: !supportVisible});
   };
-  handleFramesSelected = (pagedFrames, nestedFrames, checkedKeys) => {
-    console.log(filterOptions(pagedFrames, checkedKeys), filterOptions(nestedFrames, checkedKeys), checkedKeys);
-    this.setState({framesData: {pagedFrames, nestedFrames, checkedKeys}});
+  handleFramesSelected = (allFrames, nestedFrames, checkedKeys) => {
+    const pageIds = allFrames.map(({key}) => key);
+    this.setState({
+      framesData: {
+        pagedFrames: getSelectedPagedFrames(allFrames, checkedKeys),
+        nestedFrames: optionsToContents(nestedFrames, checkedKeys, true),
+        checkedKeys: checkedKeys
+          // 过滤掉 page id
+          .filter(key => !pageIds.includes(key))
+          .filter(key => !key.startsWith('temp-'))
+      }
+    });
   };
   async componentDidMount() {
     window.onmessage = async event => {

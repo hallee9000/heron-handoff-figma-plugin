@@ -78,7 +78,8 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
   };
 
   const handleSelectAll = isChecked => {
-    setCheckedKeys(isChecked ? keysData.allKeys : []);
+    const checkedKeys = isChecked ? keysData.allKeys : [];
+    setCheckedKeys(checkedKeys);
     // 每次勾选变化时，需要通知 Figma 更改选中项
     sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
   };
@@ -119,7 +120,7 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
         )}
         <div className="buttons">
           <span className="type type--pos-small-bold" onClick={() => toggleSettings(true)}>
-            <Settings /> 排序等设置
+            <Settings /> {t('order settings')}
           </span>
           <button className="button button--primary" onClick={showSettings}>
             {t('next step')}
