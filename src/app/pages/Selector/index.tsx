@@ -48,7 +48,11 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
     // 选择改变时
     if (type === 'bg:selection-change') {
       const {selectedFrames} = message;
-      setCheckedKeys(getSelectedKeys(selectedFrames));
+      const checkedKeys = getSelectedKeys(selectedFrames);
+      console.log(checkedKeys, keysData);
+      setCheckedKeys(checkedKeys);
+      // 检查是否选中了全部
+      setIsAllSelected(checkedKeys.length === keysData.allKeys.length - keysData.folderKeys.length);
     }
     // 切换页面时
     if (type === 'bg:current-page-change') {
@@ -67,7 +71,7 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
   // 勾选时
   const handleTreeOptionCheck = checkedKeys => {
     setCheckedKeys(checkedKeys);
-    // 选中了全部
+    // 检查是否选中了全部
     setIsAllSelected(checkedKeys.length === keysData.allKeys.length);
     // 每次勾选变化时，需要通知 Figma 更改选中项
     sendMessageToBackground('ui:checked-keys-changed', checkedKeys);
