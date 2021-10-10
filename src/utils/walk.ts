@@ -134,8 +134,13 @@ const handleStyle = (treeNode, node, convention) => {
   if (node.strokes !== undefined) {
     treeNode.strokes = node.strokes;
     treeNode.strokeWeight = node.strokeWeight !== undefined ? node.strokeWeight : 1;
-    console.log(node.name);
-    treeNode.strokeAlign = node.strokeAlign || 'INSIDE';
+    // fix strokeAlign error temporaryly
+    try {
+      treeNode.strokeAlign = node.strokeAlign || 'INSIDE';
+    } catch (err) {
+      console.error(err);
+      node.strokeAlign = 'CENTER';
+    }
   }
   const styles = getStyles(node, convention);
   if (styles) {
