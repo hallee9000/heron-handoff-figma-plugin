@@ -145,6 +145,7 @@ export const getSortedAllFrames = allFrames => {
   if (allFrames.length === 0) {
     return [];
   }
+  // sort 方法会改变原数组，所以复制一个
   const clonedAllFrames = [...allFrames];
   const alphabetFrames = clonedAllFrames.sort(compare).map(({children, ...rest}) => ({
     children: [...children].sort(compare),
@@ -154,7 +155,7 @@ export const getSortedAllFrames = allFrames => {
     children: [...children].reverse(),
     ...rest
   }));
-  return [clonedAllFrames, alphabetFrames, reversedAlphabetFrames];
+  return [allFrames, alphabetFrames, reversedAlphabetFrames];
 };
 
 export const getTitleParts = fullTitle =>

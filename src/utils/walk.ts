@@ -134,6 +134,7 @@ const handleStyle = (treeNode, node, convention) => {
   if (node.strokes !== undefined) {
     treeNode.strokes = node.strokes;
     treeNode.strokeWeight = node.strokeWeight !== undefined ? node.strokeWeight : 1;
+    console.log(node.name);
     treeNode.strokeAlign = node.strokeAlign || 'INSIDE';
   }
   const styles = getStyles(node, convention);

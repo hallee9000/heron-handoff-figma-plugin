@@ -49,7 +49,6 @@ const Selector = ({globalData, changeGlobalData, messageData, onNext, t}: Props)
     if (type === 'bg:selection-change') {
       const {selectedFrames} = message;
       const checkedKeys = getSelectedKeys(selectedFrames);
-      console.log(checkedKeys, keysData);
       setCheckedKeys(checkedKeys);
       // 检查是否选中了全部
       setIsAllSelected(checkedKeys.length === keysData.allKeys.length - keysData.folderKeys.length);
