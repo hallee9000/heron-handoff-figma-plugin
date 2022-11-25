@@ -3,3 +3,4 @@ dist
 # settings.json
 yarn-error.log
 src/keys.ts
+.DS_Store
