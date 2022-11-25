@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {withGlobalContextConsumer, withTranslation} from '@app/context';
 
+import welcome from '@assets/welcome.png';
 import './style.less';
 
 export interface Props {
@@ -32,7 +33,7 @@ const Welcome = ({isWaiting, messageData, onChecked, onWelcomed, t}: Props) => {
   return (
     !isWaiting && (
       <div className="welcome">
-        <img src="https://figmacn.com/handoff/welcome.png" />
+        <img src={welcome} />
         <h2 className="type type--pos-xlarge-bold">Heron Handoff</h2>
         <div className="welcome-introduction type type--pos-small-normal">
           {t('welcome title')}{' '}

@@ -4,6 +4,7 @@ import {withTranslation} from '@app/context';
 import {Twitter, Wechat, Copy} from '@components/icons';
 import {copySomething} from '@utils/helper';
 
+import qrcode from '@assets/qrcode.png';
 import './style.less';
 
 export interface Props {
@@ -16,7 +17,7 @@ const Support = ({visible, onClose, t}: Props) => {
   const [copyVisible, setCopyVisible] = React.useState(false);
 
   const copyLink = () => {
-    copySomething('https://figmacn.com/handoff', () => setCopyVisible(true));
+    copySomething('https://heron.design', () => setCopyVisible(true));
     setTimeout(() => setCopyVisible(false), 1000);
   };
 
@@ -43,9 +44,7 @@ const Support = ({visible, onClose, t}: Props) => {
         </a>
       </div>
       <div className="type type--pos-medium-normal">{t('or buy coffee')}</div>
-      {visible && (
-        <img src="https://guangzhou-1255718578.cos.ap-guangzhou.myqcloud.com/qrcode.jpeg" alt="Payment QRCode" />
-      )}
+      {visible && <img src={qrcode} alt="Payment QRCode" />}
       <a
         href="https://paypal.me/leadream"
         target="_blank"

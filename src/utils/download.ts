@@ -4,7 +4,7 @@ const getBaseUrl = language =>
   language === 'zh'
     ? // ? 'http://localhost:5000/'
       'https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com/'
-    : 'https://leadream.github.io/figma-handoff/';
+    : 'https://leadream.github.io/heron-handoff/';
 
 export const getScriptSrcs = indexSourceCode => {
   const scripts = indexSourceCode.match(/<script src=".\/static(?:.*?)<\/script>/g);

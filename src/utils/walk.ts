@@ -243,7 +243,9 @@ export const walkDocument = (document, selectedFrameKeys, globalData) => {
         .filter(node => {
           // exclude frames that are not selected
           const isArtboard = node.parent.type === 'PAGE' && node.type === 'FRAME';
-          isArtboard && selectedFrameKeys.indexOf(node.id) > -1 && frameNodes.push({exportType: 'frame', node});
+          if (isArtboard && selectedFrameKeys.indexOf(node.id) > -1) {
+            frameNodes.push({exportType: 'frame', node});
+          }
           return isArtboard ? selectedFrameKeys.indexOf(node.id) > -1 : node.parent.type !== 'PAGE';
         })
         .map(node => step(node));

@@ -64,7 +64,9 @@ export const optionsToContents = function(options, checkedKeys, isNested?) {
     return filteredFrames;
   }
 
-  return options.map(({children, key, title}) => ({children: walk(children), id: key, name: title}));
+  return options
+    .map(({children, key, title}) => ({children: walk(children), id: key, name: title}))
+    .filter(({children}) => !!children.length);
 };
 
 export const getFlattenedFrameKeys = (pagedFrames, checkedKeys?) => {
