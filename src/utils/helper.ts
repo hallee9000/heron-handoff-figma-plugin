@@ -82,7 +82,7 @@ export const handleWebPExportSettings = (exportSettings, exportWebP) => {
 
 // get source Code
 export const getSourceCode = url =>
-  fetch(url)
+  fetch(url, {cache: 'reload'})
     .then(response => response.text())
     .catch(error => {
       console.dir(error);

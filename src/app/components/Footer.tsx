@@ -28,7 +28,7 @@ const Footer = ({globalData, changeGlobalData, isWelcomed, onSupportClick, t}) =
       </a>
       <a
         className="type type--pos-small-normal"
-        href="https://www.figma.com/file/T2NqB87WLWTTw2XMFkGkOf/Heron-handoff?node-id=13421%3A7849"
+        href="https://docs.heron.design/zh-CN/handoff/designer"
         target="_blank"
         title={t('feedback')}
       >

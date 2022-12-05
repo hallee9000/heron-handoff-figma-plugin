@@ -73,7 +73,7 @@ const Mark = ({globalData, changeGlobalData, t}) => {
         <label className="label" />
         <a
           className="helper"
-          href="https://docs.heron.design/designer/#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E9%80%89%E4%BA%86-2x-%E6%A0%87%E6%B3%A8%E5%8F%98%E6%88%90%E4%B8%80%E5%8D%8A%E4%BA%86"
+          href="https://docs.heron.design/zh-CN/handoff/designer/#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E9%80%89%E4%BA%86-2x-%E6%A0%87%E6%B3%A8%E5%8F%98%E6%88%90%E4%B8%80%E5%8D%8A%E4%BA%86"
           target="_blank"
         >
           {t('resolution explanation').replace('{num}', getMarkSize())}

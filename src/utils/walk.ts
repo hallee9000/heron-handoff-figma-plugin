@@ -127,18 +127,37 @@ const handleCornerRadius = (treeNode, node) => {
   }
 };
 
+const handleStroke = (treeNode, node) => {
+  try {
+    if (node.strokeWeight) {
+      // mixed borders
+      if (node.strokeWeight === figma.mixed) {
+        treeNode.strokeTopWeight = node.strokeTopWeight;
+        treeNode.strokeRightWeight = node.strokeRightWeight;
+        treeNode.strokeBottomWeight = node.strokeBottomWeight;
+        treeNode.strokeLeftWeight = node.strokeLeftWeight;
+      } else {
+        // equal border
+        treeNode.strokeWeight = node.strokeWeight;
+      }
+    }
+  } catch (err) {
+    handleError(node);
+    console.log(err);
+  }
+};
+
 const handleStyle = (treeNode, node, convention) => {
   if (node.fills !== undefined && typeof node.fills !== 'symbol') {
     treeNode.fills = node.fills;
   }
   if (node.strokes !== undefined) {
     treeNode.strokes = node.strokes;
-    treeNode.strokeWeight = node.strokeWeight !== undefined ? node.strokeWeight : 1;
+    handleStroke(treeNode, node);
     // fix strokeAlign error temporaryly
     try {
       treeNode.strokeAlign = node.strokeAlign || 'INSIDE';
     } catch (err) {
-      console.error(err);
       node.strokeAlign = 'CENTER';
     }
   }
