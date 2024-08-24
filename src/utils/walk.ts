@@ -39,7 +39,11 @@ const nodeTypeMaps = {
 };
 
 const getStyleInformation = (styleId, convention) => {
-  const {id, key, name, description, remote} = figma.getStyleById(styleId);
+  const style = figma.getStyleById(styleId);
+  if (!style) {
+    return null;
+  }
+  const {id, key, name, description, remote} = style;
   return {id, key, name: getConventionName(name, convention), description, remote};
 };
 

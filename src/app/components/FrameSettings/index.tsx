@@ -48,7 +48,7 @@ const FrameSettings = function({visible, t, changeGlobalData, globalData}) {
         <label className="label" />
         <a
           className="helper"
-          href="https://docs.heron.design/zh-CN/handoff/designer/#%E5%A4%9A%E5%B1%82%E7%BA%A7%E9%A1%B5%E9%9D%A2%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"
+          href="https://docs.heronhq.com/zh-CN/handoff/designer/#%E5%A4%9A%E5%B1%82%E7%BA%A7%E9%A1%B5%E9%9D%A2%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"
           target="_blank"
         >
           {t('see explanation')}

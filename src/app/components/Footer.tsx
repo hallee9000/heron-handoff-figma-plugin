@@ -28,14 +28,14 @@ const Footer = ({globalData, changeGlobalData, isWelcomed, onSupportClick, t}) =
       </a>
       <a
         className="type type--pos-small-normal"
-        href="https://docs.heron.design/zh-CN/handoff/designer"
+        href="https://docs.heronhq.com/zh-CN/handoff/designer"
         target="_blank"
         title={t('feedback')}
       >
         <MessageCircle size={16} /> {t('feedback')}
       </a>
       <div className="stretched-box" />
-      <a href="https://heron.design" target="_blank" title={t('docs')}>
+      <a href="https://heronhq.com" target="_blank" title={t('docs')}>
         <Home size={16} />
       </a>
       {isWelcomed && (

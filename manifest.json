@@ -5,6 +5,13 @@
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": [
+      "https://figma-hanoff-1255718578.cos.ap-guangzhou.myqcloud.com",
+      "https://hallee9000.github.io",
+      "https://rsms.me"
+    ]
+  },
   "relaunchButtons": [
     {"command": "open", "name": "Heron handoff", "multipleSelection": true}
   ]
