@@ -1,5 +1,4 @@
-getRangeAllFontNames
-  export const FONT_WEIGHTS = {
+export const FONT_WEIGHTS = {
   Ultralight: 'ultralight',
   '100': 'ultralight',
   Thin: 'thin',
