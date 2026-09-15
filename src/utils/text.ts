@@ -1,4 +1,5 @@
-export const FONT_WEIGHTS = {
+getRangeAllFontNames
+  export const FONT_WEIGHTS = {
   Ultralight: 'ultralight',
   '100': 'ultralight',
   Thin: 'thin',
@@ -91,7 +92,11 @@ export const getSingleTextStyle = (textNode, index?) => {
   const textStyleId =
     index === undefined ? getTrimedStyleId(textNode.textStyleId) : textNode.getRangeTextStyleId(index, index + 1);
   const fontSize = index === undefined ? textNode.fontSize : textNode.getRangeFontSize(index, index + 1);
-  const fontName = index === undefined ? textNode.fontName : textNode.getRangeFontName(index, index + 1);
+  const rangeFontName = index === undefined ? textNode.fontName : textNode.getRangeFontName(index, index + 1);
+  const fontName =
+    typeof rangeFontName === 'symbol' && index !== undefined
+      ? textNode.getRangeAllFontNames(index, index + 1)[0]
+      : rangeFontName;
   const textDecoration =
     index === undefined ? textNode.textDecoration : textNode.getRangeTextDecoration(index, index + 1);
   const letterSpacing = index === undefined ? textNode.letterSpacing : textNode.getRangeLetterSpacing(index, index + 1);
@@ -102,8 +107,8 @@ export const getSingleTextStyle = (textNode, index?) => {
     fillStyleId,
     textStyleId,
     fontSize,
-    fontFamily: fontName.family,
-    fontWeight: FONT_WEIGHTS[fontName.style] || fontName.style,
+    fontFamily: fontName && typeof fontName !== 'symbol' ? fontName.family : undefined,
+    fontWeight: fontName && typeof fontName !== 'symbol' ? FONT_WEIGHTS[fontName.style] || fontName.style : undefined,
     textDecoration,
     letterSpacing: letterSpacing.value,
     letterSpacingUnit: letterSpacing.unit,
